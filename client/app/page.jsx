@@ -10,6 +10,11 @@ export default function Home() {
           Start Recording
         </Link>
       </button>
+      <button>
+        <Link href="/report">
+          Report
+        </Link>
+      </button>
     
     </div>
   );
