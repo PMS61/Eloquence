@@ -2,8 +2,13 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LandingPage() {
+  const scrollToSection = (sectionId) => {
+    const section = document.querySelector(sectionId);
+    section.scrollIntoView({ behavior: "smooth" });
+  };
   return (
     <div className="dark-theme">
       {/* Header */}
@@ -13,19 +18,31 @@ export default function LandingPage() {
           <nav>
             <ul className="flex space-x-4">
               <li>
-                <Link href="#features" className="hover:text-gray-400">
+                <a
+                  href="#"
+                  onClick={() => scrollToSection("#features")}
+                  className="hover:text-gray-400"
+                >
                   Features
-                </Link>
+                </a>
               </li>
               <li>
-                <Link href="#about" className="hover:text-gray-400">
+                <a
+                  href="#"
+                  onClick={() => scrollToSection("#about")}
+                  className="hover:text-gray-400"
+                >
                   About
-                </Link>
+                </a>
               </li>
               <li>
-                <Link href="#contact" className="hover:text-gray-400">
+                <a
+                  href="#"
+                  onClick={() => scrollToSection("#contact")}
+                  className="hover:text-gray-400"
+                >
                   Contact
-                </Link>
+                </a>
               </li>
             </ul>
           </nav>
