@@ -50,15 +50,15 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gray-900 text-gray-100 py-20 h-screen flex items-center justify-center text-center">
-        <div className="container mx-auto px-4">
+      <section className="bg-gray-900 text-gray-100 py-20 h-screen flex items-center justify-center text-center relative overflow-hidden">
+        <div className="container mx-auto px-4 z-10">
           <h2 className="text-4xl font-bold mb-4">Welcome to Our Website</h2>
           <p className="text-xl mb-8">
             AI-powered public speaking enhancer that provides real-time feedback
             on pace, modulation, volume, facial expressions, and vocabulary.
           </p>
           <Link
-            href="#get-started"
+            href="/session"
             className="bg-blue-500 text-white font-bold py-2 px-6 rounded hover:bg-blue-600"
           >
             Get Started
