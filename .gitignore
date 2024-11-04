@@ -2,3 +2,4 @@
 /server/node_modules
 /server/.venv
 /server/__pycache__
+/server/myenv
