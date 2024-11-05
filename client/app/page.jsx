@@ -58,7 +58,7 @@ export default function LandingPage() {
             on pace, modulation, volume, facial expressions, and vocabulary.
           </p>
           <Link
-            href="/session"
+            href="/dashboard"
             className="bg-blue-500 text-white font-bold py-2 px-6 rounded hover:bg-blue-600"
           >
             Get Started
