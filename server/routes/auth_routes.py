@@ -6,7 +6,7 @@ import pymongo
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')  # Add url_prefix here
 
 # MongoDB connection
-client = pymongo.MongoClient("mongodb://localhost:27017/")
+client = pymongo.MongoClient("mongodb+srv://pmsankheb23:KnjSAJM9oB1OMtud@eloquence.yal88.mongodb.net/")
 db = client["Eloquence"]
 collections_user = db["user"]
 
