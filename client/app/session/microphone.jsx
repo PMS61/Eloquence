@@ -40,18 +40,18 @@ const MicrophonePulse = ({ isRecording }) => {
   }, [isRecording]);
 
   return (
-    <div className="relative flex justify-center items-center h-72 rounded-lg">
+    <div className=" flex justify-center items-center rounded-lg w-96 h-96">
       {/* Pulsating circle around the microphone */}
       <div
-        className="absolute rounded-full bg-gray-700 z-0"
+        className="flex justify-center items-center rounded-full bg-gray-700  m-2"
         style={{
-          width: `${125 + volume * 2}px`, // Adjust size dynamically based on volume
-          height: `${125 + volume * 2}px`,
+          width: `${180 + volume * 1}px`, // Adjust size dynamically based on volume
+          height: `${180 + volume * 1}px`,
           transition: 'width 0.2s ease, height 0.2s ease',
         }}
-      ></div>
+      ><BsFillMicFill className="text-white " size={120} /></div>
       {/* Static microphone icon */}
-      <BsFillMicFill className="text-white z-10" size={90} />
+      
     </div>
   );
 };

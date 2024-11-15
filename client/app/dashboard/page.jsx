@@ -96,21 +96,20 @@ export default function Dashboard() {
         <div>
             <Sidebar />
             <div className="flex w-full bg-black">
-                <div className="w-full h-full mt-4">
-                <div className="m-4">
-                        
-                    </div>
-                    <div className='flex m-2'>
-                        <RecentSessions sessions={sessions}/>
-                    </div>
-                    <div className="flex flex-col mt-4 md:flex-row "> {/* Stack vertically on small screens, horizontally on medium and larger screens */}
-                        <div className="w-full px-2 pb-2 md:w-2/3"> {/* Full width on smaller screens */}
+                <div className="w-full h-full mt-8">
+                
+                    
+                    <div className="flex flex-col mt-4 md:flex-row ml-32 mb-6"> {/* Stack vertically on small screens, horizontally on medium and larger screens */}
+                        <div className="w-full   md:w-7/12"> {/* Full width on smaller screens */}
                             <PerformanceChart performanceData={performanceData} />
                         </div>
-                        <div className="flex-1  px-2 md: mt-4 md:mt-0"> {/* Add margin on larger screens */}
+                        <div className="flex-1  px-6 md: mt-4 md:mt-0"> {/* Add margin on larger screens */}
                             <PerformanceMetrics scores={scores} />
                         </div>
                         
+                    </div>
+                    <div className='flex ml-32'>
+                        <RecentSessions sessions={sessions}/>
                     </div>
                 </div>
             </div>

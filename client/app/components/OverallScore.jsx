@@ -13,11 +13,11 @@ const PerformanceMetrics = ({ scores }) => {
     };
 
     return (
-        <div className="flex flex-col w-full  ">
-        <div className="w-full bg-black text-white p-4  border-2 rounded-lg flex flex-col ">
+        <div className="flex flex-col w-full gap-y-4 ">
+        <div className="w-full bg-black text-white p-4   border-2 rounded-lg flex flex-col ">
 
             {/* Pace Progress Bar */}
-            <div className=" w-16 h-16  ">
+            <div className=" w-24 h-24  ">
                 <CircularProgressbar
                     value={pace}
                     text={`${pace}%`}
@@ -29,10 +29,10 @@ const PerformanceMetrics = ({ scores }) => {
                 />
                 
             </div>
-            </div>
+        </div>
             <div className="w-full  bg-black text-white p-4 mt-5 border-2 rounded-lg flex flex-col ">
             {/* Modulation Progress Bar */}
-            <div className="w-16 h-16 ">
+            <div className="w-24 h-24 ">
                 <CircularProgressbar
                     value={modulation}
                     text={`${modulation}%`}
@@ -46,7 +46,7 @@ const PerformanceMetrics = ({ scores }) => {
             </div>
             <div className="w-full  bg-black text-white p-4 mt-5  border-2 rounded-lg flex flex-col ">
             {/* Clarity Progress Bar */}
-            <div className="w-16 h-16 ">
+            <div className="w-24 h-24 ">
                 <CircularProgressbar
                     value={clarity}
                     text={`${clarity}%`}

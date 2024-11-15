@@ -24,22 +24,38 @@ const WebRTCRecorder = () => {
         const constraints = isVideoEnabled
           ? { video: true, audio: true }
           : { audio: true }; // Audio-only if video is disabled
-
+  
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        console.log("Stream obtained:", stream);
         setStream(stream);
+  
         if (videoRef.current && isVideoEnabled) {
           videoRef.current.srcObject = stream;
+          console.log("Video ref updated with stream.");
         }
       } catch (err) {
-        console.error("Error accessing media devices.", err);
+        console.error("Error accessing media devices:", err);
       }
     }
     getMedia();
-
+  
     return () => {
-      stream?.getTracks().forEach((track) => track.stop());
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
     };
   }, [isVideoEnabled]);
+
+  useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        videoRef.current.srcObject = stream;
+      })
+      .catch((err) => console.error("Error accessing media devices:", err));
+  }, []);
+  
+  
 
   const resetTimer = () => {
     setSeconds(0);
@@ -49,25 +65,37 @@ const WebRTCRecorder = () => {
     if (stream) {
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
+      console.log("MediaRecorder initialized:", mediaRecorder);
+  
       mediaRecorder.ondataavailable = handleDataAvailable;
+      mediaRecorder.onstop = () => console.log("Recording stopped.");
+      mediaRecorder.onerror = (e) => console.error("Recording error:", e);
+  
       mediaRecorder.start();
+      console.log("Recording started.");
       setIsRecording(true);
       setIsPaused(false);
+    } else {
+      console.error("Stream is not initialized.");
     }
   };
+  
 
   const togglePauseResume = () => {
     if (!isRecording) {
-      startRecording(); // Start recording if it's not recording
+      startRecording();
     } else if (mediaRecorderRef.current) {
       if (isPaused) {
         mediaRecorderRef.current.resume();
+        console.log("Recording resumed.");
       } else {
         mediaRecorderRef.current.pause();
+        console.log("Recording paused.");
       }
       setIsPaused(!isPaused);
     }
   };
+  
 
   // Stop recording
   const stopRecording = () => {
@@ -82,9 +110,11 @@ const WebRTCRecorder = () => {
   // Handle data availability after stopping recording
   const handleDataAvailable = (event) => {
     if (event.data.size > 0) {
+      console.log("Data available:", event.data);
       setRecordedChunks((prev) => [...prev, event.data]);
     }
   };
+  
 
   // Download recorded video or audio
   const downloadRecording = () => {
@@ -104,9 +134,10 @@ const WebRTCRecorder = () => {
   
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-purple-600 to-purple-950 flex justify-center items-center">
-      <div className="w-full max-w-xl flex flex-col items-center rounded-lg">
-        <div className="flex flex-col items-center w-full bg-gray-800 p-8 rounded-lg max-w-lg ">
+    <div className="w-full min-h-screen bg-gradient-to-b from-purple-600 to-purple-950 flex flex-col justify-center items-center ">
+      
+
+        
           <h1 className="text-2xl font-semibold text-white mb-4">
             Session Recording
           </h1>
@@ -115,15 +146,17 @@ const WebRTCRecorder = () => {
           
 
           {/* Fixed size gray box */}
-          <div className="relative w-full h-96 max-w-lg rounded-lg flex justify-center items-center">
-            {isVideoEnabled ? (
+          <div className="relative   rounded-lg flex justify-center items-center">
+            {isVideoEnabled  ? (
               <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="w-full h-full object-cover rounded-lg"
-              />
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className="w-full h-full object-cover rounded-lg transform scale-x-[-1]"
+              
+            />
+            
             ) : (
               <MicrophonePulse isRecording={isRecording} />
             )}
@@ -165,7 +198,7 @@ const WebRTCRecorder = () => {
 
 
           {recordedChunks.length > 0 ? (
-  <div className="flex space-x-4">
+      <div className="flex space-x-4">
     {/* Download Icon Button */}
     <button
       onClick={downloadRecording}
@@ -195,10 +228,10 @@ const WebRTCRecorder = () => {
           recordedChunks={recordedChunks}
           isVideoEnabled={isVideoEnabled}
         />
-        </div>
+      
           
         
-      </div>
+     
     </div>
   );
 };
