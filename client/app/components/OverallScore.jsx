@@ -1,6 +1,7 @@
 import React from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import './bg.css';
 
 const PerformanceMetrics = ({ scores }) => {
     const { pace, modulation, clarity } = scores;
@@ -13,11 +14,11 @@ const PerformanceMetrics = ({ scores }) => {
     };
 
     return (
-        <div className="flex flex-col w-full gap-y-4 ">
-        <div className="w-full bg-black text-white p-4   border-2 rounded-lg flex flex-col ">
+        <div className="flex flex-row md:flex-col justify-center items-center gap-x-1 w-full gap-y-6 ">
+        <div className="w-full glass-bg text-white p-3 border-2 rounded-lg flex flex-col md:flex-row ">
 
             {/* Pace Progress Bar */}
-            <div className=" w-24 h-24  ">
+            <div className="w-16 h-16 md:w-24 md:h-24  ">
                 <CircularProgressbar
                     value={pace}
                     text={`${pace}%`}
@@ -29,10 +30,11 @@ const PerformanceMetrics = ({ scores }) => {
                 />
                 
             </div>
+            <p className='text-sm text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, sapiente!'</p>
         </div>
-            <div className="w-full  bg-black text-white p-4 mt-5 border-2 rounded-lg flex flex-col ">
+            <div className="w-full  glass-bg text-white p-3 border-2 rounded-lg flex flex-col md:flex-row ">
             {/* Modulation Progress Bar */}
-            <div className="w-24 h-24 ">
+            <div className="w-16 h-16 md:w-24 md:h-24 ">
                 <CircularProgressbar
                     value={modulation}
                     text={`${modulation}%`}
@@ -43,10 +45,11 @@ const PerformanceMetrics = ({ scores }) => {
                     })}
                 />
             </div>
+            <p className='text-sm text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, sapiente!'</p>
             </div>
-            <div className="w-full  bg-black text-white p-4 mt-5  border-2 rounded-lg flex flex-col ">
+            <div className="w-full  glass-bg text-white p-3 gap-x-1  border-2 rounded-lg flex flex-col md:flex-row ">
             {/* Clarity Progress Bar */}
-            <div className="w-24 h-24 ">
+            <div className="w-16 h-16 md:w-24 md:h-24 ">
                 <CircularProgressbar
                     value={clarity}
                     text={`${clarity}%`}
@@ -57,6 +60,7 @@ const PerformanceMetrics = ({ scores }) => {
                     })}
                 />
             </div>
+            <p className='text-sm text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, sapiente!'</p>
             </div>
             </div>
     );

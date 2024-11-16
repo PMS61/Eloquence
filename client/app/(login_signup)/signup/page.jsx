@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import '../../components/bg.css';
 
 export default function SignUp() {
     const [credentials, setCredentials] = useState({ name: "", email: "", password: "", confirmPassword: "" });
@@ -51,8 +52,8 @@ export default function SignUp() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen px-4 bg-gray-900 ">
-            <section className="w-full max-w-sm rounded-lg shadow-md bg-gray-800 border-gray-700 p-4 sm:p-6 md:p-6">
+        <div className="flex items-center justify-center min-h-screen px-4 bg-gray-900 " id='background'>
+            <section className="glass-bg w-full max-w-sm rounded-lg shadow-md bg-gray-800 border-gray-700 p-4 sm:p-6 md:p-6">
                 <h1 className="text-lg font-bold text-center text-gray-900 dark:text-white mb-4">
                     Sign up for an account
                 </h1>

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import '../../components/bg.css'
 import Link from 'next/link';
 
 export default function Login() {
@@ -38,14 +39,14 @@ export default function Login() {
     };
 
     return (
-        <section className="flex items-center justify-center min-h-screen px-4 bg-gray-50 dark:bg-gray-900">
-            <div className="w-full max-w-sm bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 p-4 sm:p-6 md:p-8">
-                <h1 className="text-lg font-bold text-center text-gray-900 dark:text-white mb-4">
+        <section className="= flex items-center justify-center min-h-screen px-4   bg-gray-900 " id='background'>
+            <div className="w-lg md:w-1/3 glass-bg  rounded-lg shadow border bg-gray-800 border-gray-700 p-6 sm:p-6 md:p-8">
+                <h1 className="text-lg font-bold text-center text-white m-2 ">
                     Log in to your account
                 </h1>
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <form className="space-y-4 m-2" onSubmit={handleSubmit}>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-white">Your email</label>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-white m-2">Your email</label>
                         <input
                             type="email"
                             name="email"
@@ -58,7 +59,7 @@ export default function Login() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                        <label htmlFor="password" className="block text-sm font-medium text-white m-2">Password</label>
                         <input
                             type="password"
                             name="password"
@@ -70,17 +71,20 @@ export default function Login() {
                             value={credentials.password}
                         />
                     </div>
+                    <div className="w-full flex justify-center items-center">
                     <button
                         type="submit"
-                        className="w-full py-2 text-white text-sm bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                        className=" px-8 py-3 text-white text-sm bg-gray-900 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                         Login
                     </button>
+                    </div>
                     <p className="text-xs text-center text-gray-500 dark:text-gray-400">
                         Don’t have an account yet?  
                         <Link href="/signup" className="font-medium text-primary-600 hover:underline dark:text-primary-500"> Sign up</Link>
                     </p>
                 </form>
             </div>
+           
         </section>
     );
 }

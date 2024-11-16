@@ -5,7 +5,7 @@ import PerformanceMetrics from '../components/OverallScore';
 import RecentSessions from './Recents';
 import { useParams } from 'next/navigation';
 import { useState,useEffect } from 'react';
-
+import '../components/bg.css';
 export default function Dashboard() {
    const { userId } = useParams();
    const [userName, setUserName] = useState('');
@@ -95,12 +95,12 @@ export default function Dashboard() {
     return (
         <div>
             <Sidebar />
-            <div className="flex w-full bg-black">
-                <div className="w-full h-full mt-8">
+            <div className="flex w-full static-bg min-h-full">
+                <div className="w-full h-full ">
                 
                     
-                    <div className="flex flex-col mt-4 md:flex-row ml-32 mb-6"> {/* Stack vertically on small screens, horizontally on medium and larger screens */}
-                        <div className="w-full   md:w-7/12"> {/* Full width on smaller screens */}
+                    <div className="flex flex-col mt-4 md:flex-row ml-16 md:ml-28 mx-1 mb-6"> {/* Stack vertically on small screens, horizontally on medium and larger screens */}
+                        <div className="w-full h-full  md:w-7/12"> {/* Full width on smaller screens */}
                             <PerformanceChart performanceData={performanceData} />
                         </div>
                         <div className="flex-1  px-6 md: mt-4 md:mt-0"> {/* Add margin on larger screens */}
@@ -108,7 +108,7 @@ export default function Dashboard() {
                         </div>
                         
                     </div>
-                    <div className='flex ml-32'>
+                    <div className='flex ml-16 md:ml-28 mx-1'>
                         <RecentSessions sessions={sessions}/>
                     </div>
                 </div>

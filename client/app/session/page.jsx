@@ -5,6 +5,8 @@ import Timer from "./timer"; // Timer component for recording duration
 import MicrophonePulse from "./microphone";
 import { Pause, Play, Square, Download, Eye } from 'lucide-react';
 import PreviewModal from "./preview";
+import Sidebar from "../components/Sidebar";
+import '../components/bg.css';
 
 const WebRTCRecorder = () => {
   const videoRef = useRef(null);
@@ -134,105 +136,98 @@ const WebRTCRecorder = () => {
   
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-purple-600 to-purple-950 flex flex-col justify-center items-center ">
-      
-
+    <div className="flex static-bg h-screen"> {/* Changed min-h-screen to h-screen */}
+    <div className="w-16 md:w-28">
+      <Sidebar />
+    </div>
+    <div className="flex-1 p-4"> {/* Added flex-1 and padding */}
+      <div className="h-full flex flex-col glass-bg"> {/* Added h-full */}
+        <h1 className="text-3xl font-semibold text-center text-white py-2"> {/* Reduced text size and padding */}
+          Session Recording
+        </h1>
         
-          <h1 className="text-2xl font-semibold text-white mb-4">
-            Session Recording
-          </h1>
-
-          {/* Video toggle switch */}
-          
-
-          {/* Fixed size gray box */}
-          <div className="relative   rounded-lg flex justify-center items-center">
-            {isVideoEnabled  ? (
+        <div className="flex-1 flex flex-col items-center justify-center px-4"> {/* Added flex-1 */}
+          <div className="w-full h-[60vh] flex justify-center items-center"> {/* Fixed height for video container */}
+            {isVideoEnabled ? (
               <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
-              className="w-full h-full object-cover rounded-lg transform scale-x-[-1]"
-              
-            />
-            
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-contain rounded-lg transform scale-x-[-1]" /* Added object-contain */
+              />
             ) : (
               <MicrophonePulse isRecording={isRecording} />
             )}
           </div>
-          <Timer isRecording={isRecording} isPaused={isPaused} reset={!isRecording} />
-          {!isRecording && (
-          <ToggleSwitch
-            isVideoEnabled={isVideoEnabled}
-            setIsVideoEnabled={setIsVideoEnabled}
-          />)}
 
-
-         
-          <div className="flex space-x-4 py-4">
-            {/* Pause/Play/Start Button */}
-            <button
-              onClick={togglePauseResume}
-              className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 focus:outline-none"
-            >
-              {!isRecording ? (
-                <Play size={20} /> // Show Play icon to start recording
-              ) : isPaused ? (
-                <Play size={20} /> // Show Play icon to resume
-              ) : (
-                <Pause size={20} /> // Show Pause icon when recording
-              )}
-            </button>
-
-            {/* Stop Button */}
-            {isRecording && (
-              <button
-                onClick={stopRecording}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none"
-              >
-                <Square size={20} />
-              </button>
+          <div className="flex flex-col items-center space-y-2 mt-2"> {/* Organized controls */}
+            <Timer 
+              isRecording={isRecording} 
+              isPaused={isPaused} 
+              reset={!isRecording} 
+            />
+            
+            {!isRecording && (
+              <ToggleSwitch
+                isVideoEnabled={isVideoEnabled}
+                setIsVideoEnabled={setIsVideoEnabled}
+              />
             )}
+
+            <div className="flex space-x-4 py-2"> {/* Reduced padding */}
+              <button
+                onClick={togglePauseResume}
+                className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 focus:outline-none"
+              >
+                {!isRecording ? (
+                  <Play size={20} />
+                ) : isPaused ? (
+                  <Play size={20} />
+                ) : (
+                  <Pause size={20} />
+                )}
+              </button>
+
+              {isRecording && (
+                <button
+                  onClick={stopRecording}
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none"
+                >
+                  <Square size={20} />
+                </button>
+              )}
+
+              {recordedChunks.length > 0 && (
+                <>
+                  <button
+                    onClick={downloadRecording}
+                    className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:outline-none"
+                  >
+                    <Download size={20} />
+                  </button>
+
+                  <button
+                    onClick={() => setShowModal(true)}
+                    className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 focus:outline-none"
+                  >
+                    <Eye size={20} />
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-
-
-          {recordedChunks.length > 0 ? (
-      <div className="flex space-x-4">
-    {/* Download Icon Button */}
-    <button
-      onClick={downloadRecording}
-      className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:outline-none"
-    >
-      <Download size={20} />
-    </button>
-
-    {/* Preview Icon Button */}
-    <button
-      onClick={() => setShowModal(true)} // Trigger modal
-      className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 focus:outline-none"
-    >
-      <Eye size={20} />
-    </button>
-  </div>
-) : (
-  <button
-    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none"
-  >
-    Record first
-  </button>
-)}
-<PreviewModal
-          isOpen={showModal}
-          onClose={() => setShowModal(false)}
-          recordedChunks={recordedChunks}
-          isVideoEnabled={isVideoEnabled}
-        />
-      
-          
-        
-     
+        </div>
+      </div>
     </div>
+
+    <PreviewModal
+      isOpen={showModal}
+      onClose={() => setShowModal(false)}
+      recordedChunks={recordedChunks}
+      isVideoEnabled={isVideoEnabled}
+    />
+  </div>
   );
 };
 

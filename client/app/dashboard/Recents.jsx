@@ -1,23 +1,28 @@
+"use client";
 import React from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Link from 'next/link';
+import '../components/bg.css';
+import { useRouter } from 'next/navigation';
 
 
 
-const handleRowClick = (sessionId) => {
-  console.log(`Session ID: ${sessionId} clicked`);
-};
 
 const RecentSessions = ({sessions}) => {
+  const router = useRouter();
   const minRows = 5;
   const emptyRows = Math.max(minRows - sessions.length, 0);
-
+  const handleRowClick = (sessionId) => {
+    console.log(`Session ID: ${sessionId} clicked`);
+    
+    router.push(`/report`);
+  };
   return (
     <div className="w-full overflow-hidden shadow-md rounded-lg border-2  ">
       <div className="max-h-[360px] overflow-y-auto">
         <table className="w-full text-center text-gray-500">
-          <thead className="uppercase text-white border-b-2">
+          <thead className="uppercase text-white glass-bg border-b-2">
             <tr>
               <th scope="col" className="pr-1 py-2 text-[12px] sm:text-sm">Session<br />Name</th>
               <th scope="col" className="px-1 py-2 text-[12px] sm:text-sm">Voice</th>
@@ -30,7 +35,7 @@ const RecentSessions = ({sessions}) => {
               <tr
                 key={session._id}
                 onClick={() => handleRowClick(session._id)}
-                className="bg-black border-b hover:bg-gray-800 text-white cursor-pointer transition-all duration-300"
+                className="glass-bg border-b hover:bg-gray-800 text-white cursor-pointer transition-all duration-300"
               >
                 <td className="px-4 py-3 text-center text-[10px] sm:text-sm">
                   <span className="w-2 h-2 rounded-full bg-green-500 sm:hidden mr-2"></span>

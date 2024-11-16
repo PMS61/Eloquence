@@ -1,5 +1,6 @@
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import './bg.css';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -63,7 +64,7 @@ const PerformanceChart = ({ performanceData }) => {
 
     return (
         
-        <div className="w-full border-2 rounded-md p-2 ">
+        <div className="w-full border-2 rounded-md p-2 glass-bg ">
             <Line data={data} options={options} />
         </div>
         
