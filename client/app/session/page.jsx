@@ -136,7 +136,7 @@ const WebRTCRecorder = () => {
   
 
   return (
-    <div className="flex static-bg h-screen"> {/* Changed min-h-screen to h-screen */}
+    <div className="flex static-bg min-h-screen max-h-full"> {/* Changed min-h-screen to h-screen */}
     <div className="w-16 md:w-28">
       <Sidebar />
     </div>

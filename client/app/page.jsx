@@ -98,49 +98,50 @@ export default function LandingPage() {
           <h2 className="text-3xl font-bold text-gray-100 mb-8">
             Our Features
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Card 1 */}
-            <div className="card">
-              <div className="card-content">
-                <div className="h3">
-                  <span>Real-time</span> Feedback
-                </div>
-                <p className="p">
-                  Receive immediate insights on your pacing, modulation, volume,
-                  facial expressions, and vocabulary, allowing you to adjust and
-                  improve your communication skills on the spot.
-                </p>
-              </div>
-            </div>
+          <div className="flex flex-col md:flex-row gap-8">
+  {/* Card 1 */}
+  <div className="card">
+    <div className="card-content">
+      <div className="h3">
+        <span>Real-time</span> Feedback
+      </div>
+      <p className="p">
+        Receive immediate insights on your pacing, modulation, volume,
+        facial expressions, and vocabulary, allowing you to adjust and
+        improve your communication skills on the spot.
+      </p>
+    </div>
+  </div>
 
-            {/* Card 2 */}
-            <div className="card">
-              <div className="card-content">
-                <div className="h3">
-                  <span>Personalized</span> Practice
-                </div>
-                <p className="p">
-                  Offers tailored practice scenarios and prompts that adapt to
-                  individual skill levels and communication goals, allowing
-                  users to focus on specific areas for improvement.
-                </p>
-              </div>
-            </div>
+  {/* Card 2 */}
+  <div className="card">
+    <div className="card-content">
+      <div className="h3">
+        <span>Personalized</span> Practice
+      </div>
+      <p className="p">
+        Offers tailored practice scenarios and prompts that adapt to
+        individual skill levels and communication goals, allowing
+        users to focus on specific areas for improvement.
+      </p>
+    </div>
+  </div>
 
-            {/* Card 3 */}
-            <div className="card">
-              <div className="card-content">
-                <div className="h3">
-                  <span>Progress</span> Tracking
-                </div>
-                <p className="p">
-                  Monitors user performance over time with detailed analytics
-                  and visual reports, helping users identify strengths and areas
-                  needing improvement.
-                </p>
-              </div>
-            </div>
-          </div>
+  {/* Card 3 */}
+  <div className="card">
+    <div className="card-content">
+      <div className="h3">
+        <span>Progress</span> Tracking
+      </div>
+      <p className="p">
+        Monitors user performance over time with detailed analytics
+        and visual reports, helping users identify strengths and areas
+        needing improvement.
+      </p>
+    </div>
+  </div>
+</div>
+
         </div>
       </section>
 
@@ -220,7 +221,7 @@ export default function LandingPage() {
           }
         }
 
-        .card {
+       .card {
   background-color: rgb(16, 16, 16);
   border: 1px solid rgb(255 255 255 / 5%);
   border-radius: 1.25rem;
@@ -229,10 +230,24 @@ export default function LandingPage() {
   transition: transform 0.2s;
 }
 
+@media (max-width: 480px) {
+  .card {
+    padding: 0.75rem;
+    border-radius: 1rem;
+  }
+}
+
 @media (min-width: 768px) {
   .card {
     border-radius: 1.5rem;
-    padding: 1.5rem;
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card {
+    border-radius: 2rem;
+    padding: 1.6rem;
   }
 }
 
@@ -256,11 +271,26 @@ export default function LandingPage() {
   border-radius: 1rem;
 }
 
+@media (max-width: 480px) {
+  .card-content {
+    padding: 1rem;
+    background-size: 0.6rem 0.6rem;
+  }
+}
+
 @media (min-width: 768px) {
   .card-content {
     background-size: 1.1rem 1.1rem;
-    padding: 2.3rem;
+    padding: 1.25rem;
     border-radius: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-content {
+    background-size: 1.5rem 1.5rem;
+    padding: 3rem;
+    border-radius: 1.5rem;
   }
 }
 
@@ -276,9 +306,21 @@ export default function LandingPage() {
   font-size: 1.25rem;
 }
 
+@media (max-width: 480px) {
+  .card-content .h3 {
+    font-size: 1rem;
+  }
+}
+
 @media (min-width: 768px) {
   .card-content .h3 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-content .h3 {
+    font-size: 1.75rem;
   }
 }
 
@@ -288,10 +330,24 @@ export default function LandingPage() {
   font-size: 0.9rem;
 }
 
+@media (max-width: 480px) {
+  .card-content .p {
+    line-height: 1rem;
+    font-size: 0.8rem;
+  }
+}
+
 @media (min-width: 768px) {
   .card-content .p {
-    line-height: 1.3rem;
+    line-height: 1rem;
     font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-content .p {
+    line-height: 1.5rem;
+    font-size: 1.1rem;
   }
 }
 

@@ -95,7 +95,7 @@ export default function Dashboard() {
     return (
         <div>
             <Sidebar />
-            <div className="flex w-full static-bg min-h-full">
+            <div className="flex w-full static-bg min-h-screen max-h-full">
                 <div className="w-full h-full ">
                 
                     
