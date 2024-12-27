@@ -35,12 +35,6 @@ export default function Sidebar() {
                             
                         </button>
                     </Link>
-                    <Link href="/resources">
-                        <button className="flex justify-center items-center gap-4 py-2.5 px-2 text-white hover:bg-gray-700 w-full">
-                            <PieChart size={30}/>
-                            
-                        </button>
-                    </Link>
                     
                     <Link href="/session">
                     <button className="flex justify-center items-center mt-8  gap-4 py-2.5 px-2 text-white bg-blue-700 hover:bg-blue-800 w-full rounded-md">

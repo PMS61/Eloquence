@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Satisfy, Playfair_Display } from '@next/font/google';
+import { Satisfy, Playfair_Display } from 'next/font/google';
 
 const satisfy = Satisfy({
   subsets: ['latin'],
@@ -81,7 +81,7 @@ export default function LandingPage() {
             on pace, modulation, volume, facial expressions, and vocabulary.
           </p>
           <Link
-            href="/dashboard"
+            href="/signup"
             className="bg-blue-500 text-white font-bold py-2 px-6 rounded hover:bg-blue-600"
           >
             Get Started
