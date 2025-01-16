@@ -113,25 +113,76 @@ const WebRTCRecorder = () => {
     }
   };
   
-  // Helper function to convert audio buffer to WAV format
+
+  
+  const handleDataAvailable = (event) => {
+    if (event.data.size > 0) {
+      setRecordedChunks((prev) => [...prev, event.data]);
+    }
+  };
+
+  const downloadRecording = async () => {
+    // Create and download the video blob
+    const videoBlob = new Blob(recordedChunks, { type: "video/webm" });
+    const videoUrl = URL.createObjectURL(videoBlob);
+    const videoLink = document.createElement("a");
+    videoLink.style.display = "none";
+    videoLink.href = videoUrl;
+    videoLink.download = "recording.webm";
+    document.body.appendChild(videoLink);
+    videoLink.click();
+    URL.revokeObjectURL(videoUrl);
+  
+    // Extract audio from the video and download it
+    const audioBlob = await convertVideoToAudio(videoBlob);
+    if (audioBlob) {
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audioLink = document.createElement("a");
+      audioLink.style.display = "none";
+      audioLink.href = audioUrl;
+      audioLink.download = "audio.wav";
+      document.body.appendChild(audioLink);
+      audioLink.click();
+      URL.revokeObjectURL(audioUrl);
+    }
+  };
+
+  const convertVideoToAudio = async (videoBlob) => {
+    try {
+      // Decode the video Blob into an ArrayBuffer
+      const arrayBuffer = await videoBlob.arrayBuffer();
+  
+      // Use the Web Audio API to decode the audio data
+      const audioContext = new AudioContext();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+  
+      // Convert the audio buffer into a WAV Blob
+      const wavBlob = audioBufferToWav(audioBuffer);
+      return wavBlob;
+    } catch (error) {
+      console.error("Error converting video to audio:", error);
+      return null;
+    }
+  };
+
   const audioBufferToWav = (audioBuffer) => {
-    const numOfChannels = audioBuffer.numberOfChannels;
+    const numChannels = audioBuffer.numberOfChannels;
     const sampleRate = audioBuffer.sampleRate;
-    const length = audioBuffer.length * numOfChannels * 2 + 44;
+    const length = audioBuffer.length * numChannels * 2 + 44;
     const buffer = new ArrayBuffer(length);
     const view = new DataView(buffer);
   
-    // Write WAV headers
-    writeWavHeader(view, audioBuffer.length, sampleRate, numOfChannels);
+    // Write WAV file header
+    writeWavHeader(view, audioBuffer.length, sampleRate, numChannels);
   
-    // Write interleaved audio data
+    // Interleave the audio data
     let offset = 44;
     const channels = [];
-    for (let i = 0; i < numOfChannels; i++) {
+    for (let i = 0; i < numChannels; i++) {
       channels.push(audioBuffer.getChannelData(i));
     }
     for (let i = 0; i < audioBuffer.length; i++) {
-      for (let channel = 0; channel < numOfChannels; channel++) {
+      for (let channel = 0; channel < numChannels; channel++) {
         const sample = Math.max(-1, Math.min(1, channels[channel][i]));
         view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7fff, true);
         offset += 2;
@@ -141,6 +192,7 @@ const WebRTCRecorder = () => {
     return new Blob([buffer], { type: "audio/wav" });
   };
   
+  // Helper function to write WAV file headers
   const writeWavHeader = (view, dataLength, sampleRate, numChannels) => {
     const blockAlign = numChannels * 2;
     const byteRate = sampleRate * blockAlign;
@@ -158,68 +210,6 @@ const WebRTCRecorder = () => {
     view.setUint16(34, 16, true); // BitsPerSample
     view.setUint32(36, 0x61746164, false); // "data"
     view.setUint32(40, dataLength * numChannels * 2, true); // Subchunk2Size
-  };
-  
-  const handleDataAvailable = (event) => {
-    if (event.data.size > 0) {
-      setRecordedChunks((prev) => [...prev, event.data]);
-    }
-  };
-
-  const downloadRecording = () => {
-    const blob = new Blob(recordedChunks, {
-      type: isVideoEnabled ? "video/webm" : "audio/wav",
-    });
-
-    // Save the original recording
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.style.display = "none";
-    a.href = url;
-    a.download = isVideoEnabled ? "recording.webm" : "recording.wav";
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-
-    // If it's a video, save the audio-only version
-    if (isVideoEnabled) {
-      extractAudio(blob);
-    }
-  };
-
-  const extractAudio = (videoBlob) => {
-    const videoElement = document.createElement("video");
-    videoElement.src = URL.createObjectURL(videoBlob);
-    videoElement.muted = true;
-
-    videoElement.onloadedmetadata = async () => {
-      const audioContext = new AudioContext();
-      const source = audioContext.createMediaElementSource(videoElement);
-      const destination = audioContext.createMediaStreamDestination();
-      source.connect(destination);
-      const audioRecorder = new MediaRecorder(destination.stream);
-
-      let audioChunks = [];
-      audioRecorder.ondataavailable = (e) => audioChunks.push(e.data);
-      audioRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audioAnchor = document.createElement("a");
-        audioAnchor.style.display = "none";
-        audioAnchor.href = audioUrl;
-        audioAnchor.download = "audio-only.wav";
-        document.body.appendChild(audioAnchor);
-        audioAnchor.click();
-        URL.revokeObjectURL(audioUrl);
-      };
-
-      audioRecorder.start();
-      videoElement.play();
-      setTimeout(() => {
-        audioRecorder.stop();
-        videoElement.pause();
-      }, videoElement.duration * 1000);
-    };
   };
 
   return (
