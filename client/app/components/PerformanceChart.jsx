@@ -1,73 +1,42 @@
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import './bg.css';
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+import React from 'react';
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+} from 'recharts';
 
 const PerformanceChart = ({ performanceData }) => {
     const { labels, paceData, modulationData, clarityData } = performanceData;
 
-    const data = {
-        labels: labels, // e.g., session dates or numbers
-        datasets: [
-            {
-                label: 'Pace',
-                data: paceData,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                tension: 0.4,
-            },
-            {
-                label: 'Modulation',
-                data: modulationData,
-                borderColor: 'rgba(153, 102, 255, 1)',
-                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                tension: 0.4,
-            },
-            {
-                label: 'Clarity',
-                data: clarityData,
-                borderColor: 'rgba(255, 159, 64, 1)',
-                backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                tension: 0.4,
-            },
-        ],
-    };
-
-    const options = {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Performance Over Time',
-            },
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                title: {
-                    display: true,
-                    text: 'Score',
-                },
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Session',
-                },
-            },
-        },
-    };
+    // Transform data into a format Recharts understands
+    const chartData = labels.map((label, index) => ({
+        session: label,
+        Pace: paceData[index],
+        Modulation: modulationData[index],
+        Clarity: clarityData[index],
+    }));
 
     return (
-        
-        <div className="w-full border-2 rounded-md p-2 glass-bg ">
-            <Line data={data} options={options} />
+        <div className="w-full border-2 rounded-md p-2 glass-bg" style={{ minHeight: '300px' }}>
+            {/* ResponsiveContainer makes the chart fully responsive */}
+            <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="session" label={{ value: 'Session', position: 'insideBottom', offset: -5 }} />
+                    <YAxis label={{ value: 'Score', angle: -90, position: 'insideLeft' }} />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="Pace" stroke="#4bc0c0" strokeWidth={2} dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="Modulation" stroke="#9966FF" strokeWidth={2} dot={{ r: 3 }} />
+                    <Line type="monotone" dataKey="Clarity" stroke="#FF9F40" strokeWidth={2} dot={{ r: 3 }} />
+                </LineChart>
+            </ResponsiveContainer>
         </div>
-        
     );
 };
 

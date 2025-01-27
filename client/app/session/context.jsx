@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import mammoth from "mammoth"; // For DOCX files
-import * as pdfjsLib from "pdfjs-dist"; // For PDF files
-import "../components/bg.css"
-
-// Dynamically set the worker path
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+import pdfToText from "react-pdftotext"; // For PDF files
+import "../components/bg.css";
 
 const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
   const [text, setText] = useState(""); // User-entered text
@@ -39,18 +36,12 @@ const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
         .then((result) => setUploadedText((prev) => prev + "\n" + result.value))
         .catch(() => alert("Failed to parse DOCX file."));
     } else if (fileType === "pdf") {
-      const buffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: buffer }).promise;
-      let fullText = "";
-
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items.map((item) => item.str).join(" ");
-        fullText += pageText + "\n";
+      try {
+        const extractedText = await pdfToText(file);
+        setUploadedText((prev) => prev + "\n" + extractedText);
+      } catch (error) {
+        alert("Failed to extract text from PDF.");
       }
-
-      setUploadedText((prev) => prev + "\n" + fullText);
     } else {
       alert("Unsupported file format. Please upload TXT, DOCX, or PDF.");
     }
