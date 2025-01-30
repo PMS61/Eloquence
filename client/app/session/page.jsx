@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import ToggleSwitch from "./switch"; // Assume it's in the same folder
-import Timer from "./timer"; // Timer component for recording duration
+import ToggleSwitch from "./switch";
+import Timer from "./timer";
 import MicrophonePulse from "./microphone";
 import { Pause, Play, Square, Download, Eye, Plus, Pencil } from "lucide-react";
 import PreviewModal from "./preview";
@@ -22,52 +22,38 @@ const WebRTCRecorder = () => {
   const [showContextDialog, setShowContextDialog] = useState(false);
   const [context, setContext] = useState("");
   const [isContextSaved, setIsContextSaved] = useState(false);
- 
+  const [report, setReport] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(null); // State for uploaded file
 
   useEffect(() => {
     async function getMedia() {
       try {
         const constraints = isVideoEnabled
           ? { video: true, audio: true }
-          : { audio: true }; // Audio-only if video is disabled
-  
+          : { audio: true };
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        console.log("Stream obtained:", stream);
         setStream(stream);
-  
         if (videoRef.current && isVideoEnabled) {
           videoRef.current.srcObject = stream;
-          console.log("Video ref updated with stream.");
         }
       } catch (err) {
         console.error("Error accessing media devices:", err);
       }
     }
     getMedia();
-  
+
     return () => {
       if (stream) {
         stream.getTracks().forEach((track) => track.stop());
       }
     };
   }, [isVideoEnabled]);
-  
+
   const handleContextSave = (text) => {
     setContext(text);
     setIsContextSaved(true);
-    console.log("Context saved:", text);
   };
-
-  useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        videoRef.current.srcObject = stream;
-      })
-      .catch((err) => console.error("Error accessing media devices:", err));
-  }, []);
-  
-  
 
   const resetTimer = () => {
     setSeconds(0);
@@ -75,23 +61,19 @@ const WebRTCRecorder = () => {
 
   const startRecording = () => {
     if (stream) {
-      const mediaRecorder = new MediaRecorder(stream);
+      const options = { mimeType: "video/mp4" }; // Set MIME type to MP4
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
-      console.log("MediaRecorder initialized:", mediaRecorder);
-  
       mediaRecorder.ondataavailable = handleDataAvailable;
       mediaRecorder.onstop = () => console.log("Recording stopped.");
       mediaRecorder.onerror = (e) => console.error("Recording error:", e);
-  
       mediaRecorder.start();
-      console.log("Recording started.");
       setIsRecording(true);
       setIsPaused(false);
     } else {
       console.error("Stream is not initialized.");
     }
   };
-  
 
   const togglePauseResume = () => {
     if (!isRecording) {
@@ -99,17 +81,13 @@ const WebRTCRecorder = () => {
     } else if (mediaRecorderRef.current) {
       if (isPaused) {
         mediaRecorderRef.current.resume();
-        console.log("Recording resumed.");
       } else {
         mediaRecorderRef.current.pause();
-        console.log("Recording paused.");
       }
       setIsPaused(!isPaused);
     }
   };
-  
 
-  // Stop recording
   const stopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
@@ -119,32 +97,81 @@ const WebRTCRecorder = () => {
     }
   };
 
-  // Handle data availability after stopping recording
   const handleDataAvailable = (event) => {
     if (event.data.size > 0) {
-      console.log("Data available:", event.data);
       setRecordedChunks((prev) => [...prev, event.data]);
     }
   };
-  
 
-  // Download recorded video or audio
   const downloadRecording = () => {
     const blob = new Blob(recordedChunks, {
-      type: isVideoEnabled ? "video/webm" : "audio/wav",
+      type: isVideoEnabled ? "video/mp4" : "audio/wav", // Use MP4 for video
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = url;
-    a.download = isVideoEnabled ? "recording.webm" : "recording.wav";
+    a.download = isVideoEnabled ? "recording.mp4" : "recording.wav"; // Save as MP4
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
   };
 
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type based on mode
+      if (
+        (isVideoEnabled && file.type === "video/mp4") ||
+        (!isVideoEnabled && file.type === "audio/wav")
+      ) {
+        setUploadedFile(file);
+      } else {
+        alert(
+          `Invalid file type. Please upload a ${
+            isVideoEnabled ? "video/mp4" : "audio/wav"
+          } file.`
+        );
+      }
+    }
+  };
 
+  const uploadRecording = async () => {
+    if (!uploadedFile && recordedChunks.length === 0) {
+      alert("No recording or file to upload.");
+      return;
+    }
 
+    setLoading(true);
+    const formData = new FormData();
+
+    if (uploadedFile) {
+      // Use the uploaded file
+      formData.append("file", uploadedFile);
+    } else {
+      // Use the recorded chunks
+      const blob = new Blob(recordedChunks, {
+        type: isVideoEnabled ? "video/mp4" : "audio/wav",
+      });
+      formData.append("file", blob, isVideoEnabled ? "recording.mp4" : "recording.wav");
+    }
+
+    formData.append("context", context);
+    formData.append("mode", isVideoEnabled ? "video" : "audio");
+
+    try {
+      const response = await fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      setReport(data);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex static-bg min-h-screen max-h-full">
@@ -225,11 +252,23 @@ const WebRTCRecorder = () => {
                     >
                       <Eye size={20} />
                     </button>
-
-
                   </>
                 )}
               </div>
+              {/* File Upload Input */}
+              <input
+                type="file"
+                accept={isVideoEnabled ? "video/mp4" : "audio/wav"}
+                onChange={handleFileUpload}
+                className="mt-4"
+              />
+              <button
+                onClick={uploadRecording}
+                className="bg-indigo-500 text-white p-2 rounded-lg hover:bg-indigo-600 focus:outline-none"
+                disabled={loading}
+              >
+                {loading ? "Uploading..." : "Upload"}
+              </button>
             </div>
           </div>
         </div>
@@ -246,6 +285,20 @@ const WebRTCRecorder = () => {
         onSave={handleContextSave}
         initialContext={context}
       />
+      {report && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded-lg">
+            <h2 className="text-xl font-bold">Report</h2>
+            <pre>{JSON.stringify(report, null, 2)}</pre>
+            <button
+              onClick={() => setReport(null)}
+              className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

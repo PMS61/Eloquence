@@ -1,8 +1,6 @@
 from fer import Video
 from fer import FER
-import os
 import pandas as pd
-from groq import Groq
 
 def analyze_video_emotions(video_file_path):
     """
@@ -23,6 +21,11 @@ def analyze_video_emotions(video_file_path):
     # Analyze the video
     processing_data = input_video.analyze(face_detector, display=False)
 
+    # Check if any faces were detected
+    if not processing_data:
+        print("No faces detected in the video.")
+        return pd.DataFrame()  # Return an empty DataFrame if no faces are detected
+
     # Convert the results to a DataFrame
     vid_df = input_video.to_pandas(processing_data)
     vid_df = input_video.get_first_face(vid_df)
@@ -39,32 +42,3 @@ def analyze_video_emotions(video_file_path):
     })
 
     return score_comparisons
-
-# # Usage example
-# location_videofile = "testvideo.mp4"
-# score_comparisons = analyze_video_emotions(location_videofile)
-
-# # Print the emotion scores DataFrame
-# print(score_comparisons)
-
-# # Continue with the Groq API processing
-# client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
-# speech_context = "This is a motivational speech delivered to inspire a team of professionals to overcome challenges and stay optimistic."
-
-# system_message = f"""
-# You are an expert in emotional and contextual analysis of speeches. Based on the context: "{speech_context}", 
-# evaluate if the emotions expressed in the video match the intended purpose.Do not mention the specific values of the data in your analysis. Consider the following emotion data:
-# {score_comparisons.to_dict()}.
-# """
-
-# user_message = "Provide a short one paragraph report on the emotional appropriateness and a score out of 100."
-
-# chat_completion = client.chat.completions.create(
-#     messages=[
-#         {"role": "system", "content": system_message},
-#         {"role": "user", "content": user_message},
-#     ],
-#     model="llama-3.3-70b-versatile",
-# )
-
-# print(chat_completion.choices[0].message.content)
