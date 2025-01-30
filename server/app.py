@@ -18,7 +18,7 @@ app = Flask(__name__)
 CORS(app)
 
 # MongoDB connection
-client = pymongo.MongoClient("mongodb+srv://pmsankheb23:KnjSAJM9oB1OMtud@eloquence.yal88.mongodb.net/")
+client = pymongo.MongoClient("")
 db = client["Eloquence"]
 collections_user = db["user"]
 reports_collection = db["reports"]
