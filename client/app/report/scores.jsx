@@ -1,22 +1,58 @@
 "use client";
+import { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import "../components/bg.css";
 
 const Scores = () => {
-  const metrics = [
-    { label: "Voice", value: 89, color: "#FF4500" },
-    { label: "Expression", value: 89, color: "#FF4500" },
-    { label: "Vocabulary", value: 89, color: "#FF4500" },
-    { label: "Relevance", value: 89, color: "#FF4500" },
-  ];
+  const [report, setReport] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch report data from the backend
+  useEffect(() => {
+    const fetchReport = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/report"); // Replace with your backend endpoint
+        if (!response.ok) {
+          throw new Error("Failed to fetch report");
+        }
+        const data = await response.json();
+        setReport(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReport();
+  }, []);
+
+  // Define metrics based on the fetched report
+  const metrics = report
+    ? [
+        { label: "Voice", value: report.scores.voice, color: "#FF4500" },
+        { label: "Expression", value: report.scores.expressions, color: "#FF4500" },
+        { label: "Vocabulary", value: report.scores.vocabulary, color: "#FF4500" },
+      ]
+    : [];
+
+  if (loading) {
+    return <div className="text-center text-white">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">Error: {error}</div>;
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 max-w-7xl h-full mx-auto">
+    <div className="space-y-8 p-4 max-w-7xl h-full mx-auto">
       {metrics.map((metric, index) => (
+        <div className="flex glass-bg rounded-md shadow-lg p-6 items-center gap-4">
         <div
           key={index}
-          className="flex flex-col items-center p-6 glass-bg rounded-md shadow-lg"
+          className="  items-center p-6  "
         >
           <CircularProgressbar
             value={metric.value}
@@ -30,12 +66,15 @@ const Scores = () => {
               textSize: "14px",
             })}
           />
+          </div>
+          <div className="w-3/4">
           <p className="mt-4 text-center text-sm sm:text-base text-gray-300">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde totam
-            alias fugiat veritatis qui laboriosam animi inventore consectetur
-            repudiandae tenetur?
+            {metric.label === "Voice" && report.speech_report}
+            {metric.label === "Expression" && report.expression_report}
+            {metric.label === "Vocabulary" && report.vocabulary_report}
           </p>
-        </div>
+          </div>
+          </div>
       ))}
     </div>
   );
