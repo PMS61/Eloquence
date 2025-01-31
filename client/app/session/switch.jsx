@@ -19,7 +19,7 @@ const ToggleSwitch = ({ isVideoEnabled, setIsVideoEnabled }) => {
           }`}
         ></span>
       </label>
-      <span>{isVideoEnabled ? "Video Enabled" : "Audio Only"}</span>
+      <span className="text-neutral-200">{isVideoEnabled ? "Video Enabled" : "Audio Only"}</span>
     </div>
   );
 };

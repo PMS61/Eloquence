@@ -353,40 +353,14 @@ export default function LandingPage() {
 
 
       #background {
-  background: linear-gradient(
-    90deg,
-    #3ea2f6, /* Light Blue */
-    #4eb8f7, /* Sky Blue */
-    #70a4ff, /* Deeper Blue */
-    #f34bcf, /* Pink */
-    #a788ff, /* Light Purple */
-    #ff7592, /* Peach */
-    #cd6eff  /* Lavender */
-  );
-  background-size: 1000% 1000%;
-  animation: backgroundAnimation 15s ease infinite;
+  background-color: #334155;
 }
 
-@keyframes backgroundAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+
 
 
   .glass-bg {
-    background: rgba(0, 0, 0, 0.5); /* Black background with 50% opacity */
-    backdrop-filter: blur(10px); /* Blurs the content behind the element */
-    -webkit-backdrop-filter: blur(10px); /* For Safari support */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Light border for a frosted effect */
-    border-radius: 1rem; /* Rounded corners for aesthetic */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+  background-color: #334155;
   }
 
         @media (max-width: 700px) {

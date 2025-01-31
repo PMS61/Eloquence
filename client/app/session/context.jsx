@@ -49,12 +49,12 @@ const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
 
   return isOpen ? (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="glass-bg p-4 rounded-lg shadow-lg w-96 max-h-screen overflow-auto">
-        <h2 className="text-xl text-white font-semibold mb-4">Enter Context</h2>
+      <div className="bg-[#1E293B] p-6 rounded-lg shadow-lg w-96 max-h-screen overflow-auto border border-[#334155]">
+        <h2 className="text-xl font-semibold text-[#C9CBD0] mb-4">Enter Context</h2>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="w-full p-2 border rounded-lg resize-none text-white overflow-auto bg-gray-800"
+          className="w-full p-3 border border-[#3ABDF8] rounded-lg resize-none text-[#C9CBD0] bg-[#334155] placeholder-[#818CF8] focus:outline-none focus:border-[#818CF8] focus:ring-2 focus:ring-[#818CF8] transition-all"
           placeholder="Enter context here..."
           rows="5"
           style={{ maxHeight: "60vh" }}
@@ -62,7 +62,7 @@ const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
 
         {/* Uploaded Script Content */}
         {uploadedText && (
-          <div className="mt-4 p-2 border rounded text-white bg-gray-800 overflow-auto max-h-[30vh]">
+          <div className="mt-4 p-3 border border-[#3ABDF8] rounded-lg text-[#C9CBD0] bg-[#334155] overflow-auto max-h-[30vh]">
             <h3 className="font-medium mb-2">Uploaded Script Content</h3>
             <div>{uploadedText}</div>
           </div>
@@ -72,7 +72,7 @@ const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
         <div className="flex items-center justify-between mt-4">
           <label
             htmlFor="file-upload"
-            className="px-4 py-2 bg-green-500 text-white rounded-lg cursor-pointer hover:bg-green-600"
+            className="px-4 py-2 bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white rounded-lg cursor-pointer hover:opacity-90 transition-all"
           >
             Add Script
           </label>
@@ -89,13 +89,13 @@ const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
         <div className="flex justify-end space-x-2 mt-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+            className="px-4 py-2 bg-[#334155] text-[#C9CBD0] rounded-lg hover:bg-[#3ABDF8] hover:text-white transition-all"
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+            className="px-4 py-2 bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white rounded-lg hover:opacity-90 transition-all"
           >
             Save
           </button>

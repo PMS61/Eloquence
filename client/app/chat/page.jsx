@@ -3,18 +3,18 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import { Send } from "lucide-react";
-import { Satisfy, Playfair_Display } from "next/font/google";
+import { Inter, Roboto_Mono } from "next/font/google";
 import Markdown from "markdown-to-jsx";
 import "../components/bg.css";
 
-const satisfy = Satisfy({
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500", "700"],
 });
 
-const playfair = Playfair_Display({
+const robotoMono = Roboto_Mono({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "700"],
 });
 
 export default function ChatPage() {
@@ -44,9 +44,9 @@ export default function ChatPage() {
         {
           method: "POST",
           headers: {
-            "Authorization": "Bearer <TOKEN>",
+            Authorization: "Bearer <TOKEN>",
             "Content-Type": "application/json",
-            "x-api-key": process.env.NEXT_PUBLIC_LANGFLOW_API_KEY
+            "x-api-key": process.env.NEXT_PUBLIC_LANGFLOW_API_KEY,
           },
           body: JSON.stringify({
             input_value: userMessage.content,
@@ -57,8 +57,8 @@ export default function ChatPage() {
               "ChatOutput-gop4R": {},
               "GroqModel-akwmH": {},
               "CombineText-OgpZW": {},
-              "TextInput-LiP6A": {}
-            }
+              "TextInput-LiP6A": {},
+            },
           }),
         }
       );
@@ -92,12 +92,14 @@ export default function ChatPage() {
   return (
     <div>
       <Sidebar />
-      <div className="flex w-full max-h-full min-h-screen static-bg">
+      <div className="flex w-full max-h-full min-h-screen bg-[#0F172A]">
         <div className="w-full h-full">
           <div className="flex flex-col mx-4 mt-4 ml-16 md:ml-28">
-            <div className="glass-bg w-full h-[85vh] flex flex-col rounded-lg overflow-hidden">
-              <div className="p-4 border-b border-gray-700">
-                <h1 className={`${satisfy.className} text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text`}>
+            <div className="w-full h-[95vh] flex flex-col rounded-lg overflow-hidden bg-[#1E293B] border border-[#334155]">
+              <div className="p-4 border-b border-[#334155]">
+                <h1
+                  className={`${robotoMono.className} text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] bg-clip-text`}
+                >
                   Chat Assistant
                 </h1>
               </div>
@@ -113,11 +115,11 @@ export default function ChatPage() {
                     <div
                       className={`max-w-[70%] rounded-lg p-3 ${
                         message.role === "user"
-                          ? "bg-gradient-to-r from-[#0159a1] to-[#c6069c] text-white"
-                          : "glass-bg text-gray-100"
+                          ? "bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white"
+                          : "bg-[#334155] text-[#C9CBD0]"
                       }`}
                     >
-                      <div className={`${playfair.className} prose prose-invert max-w-none`}>
+                      <div className={`${inter.className} prose prose-invert max-w-none`}>
                         <Markdown>{message.content}</Markdown>
                       </div>
                     </div>
@@ -125,8 +127,8 @@ export default function ChatPage() {
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="glass-bg text-gray-100 max-w-[70%] rounded-lg p-3">
-                      <p className={`${playfair.className}`}>Thinking...</p>
+                    <div className="bg-[#334155] text-[#C9CBD0] max-w-[70%] rounded-lg p-3">
+                      <p className={`${inter.className}`}>Thinking...</p>
                     </div>
                   </div>
                 )}
@@ -134,7 +136,7 @@ export default function ChatPage() {
 
               <form
                 onSubmit={handleSendMessage}
-                className="p-4 border-t border-gray-700"
+                className="p-4 border-t border-[#334155]"
               >
                 <div className="flex gap-4">
                   <input
@@ -142,12 +144,12 @@ export default function ChatPage() {
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
                     placeholder="Type your message..."
-                    className="flex-1 p-3 text-gray-100 placeholder-gray-400 border border-gray-700 rounded-lg glass-bg focus:outline-none focus:border-blue-500"
+                    className="flex-1 p-3 text-[#C9CBD0] placeholder-[#818CF8] border border-[#334155] rounded-lg bg-[#1E293B] focus:outline-none focus:border-[#3ABDF8]"
                     disabled={isLoading}
                   />
                   <button
                     type="submit"
-                    className={`bg-gradient-to-r from-[#0159a1] to-[#c6069c] text-white p-3 rounded-lg hover:opacity-90 focus:outline-none transition-all duration-200 ${
+                    className={`bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white p-3 rounded-lg hover:opacity-90 focus:outline-none transition-all duration-200 ${
                       isLoading ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     disabled={isLoading}
@@ -172,12 +174,12 @@ export default function ChatPage() {
         }
 
         ::-webkit-scrollbar-thumb {
-          background: linear-gradient(to bottom, #0159a1, #c6069c);
+          background: linear-gradient(to bottom, #3ABDF8, #818CF8);
           border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-          background: linear-gradient(to bottom, #0159a1, #8510c4);
+          background: linear-gradient(to bottom, #3ABDF8, #6B7BFF);
         }
       `}</style>
     </div>
