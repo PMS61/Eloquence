@@ -13,12 +13,13 @@ from groq import Groq
 from transformers import AutoModelForAudioClassification, AutoFeatureExtractor
 import pandas as pd
 from bson import ObjectId  # Import ObjectId from bson
+import json
 
 app = Flask(__name__)
 CORS(app)
 
 # MongoDB connection
-client = pymongo.MongoClient("")
+client = pymongo.MongoClient("mongodb+srv://pmsankheb23:KnjSAJM9oB1OMtud@eloquence.yal88.mongodb.net/")
 db = client["Eloquence"]
 collections_user = db["user"]
 reports_collection = db["reports"]
@@ -146,14 +147,12 @@ def upload_file():
         # Evaluate vocabulary
         vocabulary_report = evaluate_vocabulary(transcription, context)
 
-        # Generate scores
-        vocabulary_score = int(vocabulary_report.split("Overall Score: ")[1].split("/")[0])  # Extract score from report
-        voice_score = calculate_voice_score(audio_emotion)
-        expressions_score = calculate_expressions_score(emotion_analysis) if mode == "video" else 0  # No expression score for audio-only mode
+        # Convert emotion_analysis DataFrame to a string
+        emotion_analysis_str = emotion_analysis.to_string(index=False)
 
         # Generate reports using Groq API
         speech_report = generate_speech_report(transcription, context, audio_emotion)
-        expression_report = generate_expression_report(emotion_analysis) if mode == "video" else "No expression analysis for audio-only mode."
+        expression_report = generate_expression_report(emotion_analysis_str) if mode == "video" else "No expression analysis for audio-only mode."
 
         # Prepare report data
         report_data = {
@@ -165,9 +164,9 @@ def upload_file():
             "emotion_analysis": emotion_analysis.to_dict() if mode == "video" else {},
             "audio_emotion": audio_emotion,
             "scores": {
-                "vocabulary": vocabulary_score,
-                "voice": voice_score,
-                "expressions": expressions_score
+                "vocabulary": 0,  # Placeholder, as we're not extracting scores
+                "voice": 0,       # Placeholder, as we're not extracting scores
+                "expressions": 0  # Placeholder, as we're not extracting scores
             }
         }
 
@@ -186,6 +185,16 @@ def upload_file():
         return jsonify(report_data), 200
     return jsonify({"error": "File type not allowed"}), 400
 
+@app.route('/report', methods=['GET'])
+def get_report():
+    # Fetch the latest report from MongoDB
+    report = reports_collection.find_one(sort=[('_id', -1)])  # Get the most recent report
+    if report:
+        report["_id"] = str(report["_id"])  # Convert ObjectId to string
+        return jsonify(report), 200
+    else:
+        return jsonify({"error": "No report found"}), 404
+
 def generate_speech_report(transcription, context, audio_emotion):
     system_message = f"""
     You are an expert in emotional and contextual analysis of speeches. Based on the context: "{context}", 
@@ -200,12 +209,17 @@ def generate_speech_report(transcription, context, audio_emotion):
         ],
         model="llama-3.3-70b-versatile",
     )
+    print(chat_completion.choices[0].message.content)
     return chat_completion.choices[0].message.content
 
-def generate_expression_report(emotion_analysis):
+def generate_expression_report(emotion_analysis_str):
+    """
+    Generate a report based on the emotion analysis data.
+    """
     system_message = f"""
     You are an expert in emotional analysis of facial expressions. Evaluate the following emotion data:
-    {emotion_analysis.to_dict()}.
+    {emotion_analysis_str}.
+    Provide a short one paragraph report on the emotional appropriateness and a score out of 100.
     """
     user_message = "Provide a short one paragraph report on the emotional appropriateness and a score out of 100."
     chat_completion = groq_client.chat.completions.create(
@@ -215,7 +229,52 @@ def generate_expression_report(emotion_analysis):
         ],
         model="llama-3.3-70b-versatile",
     )
+    print(chat_completion.choices[0].message.content)
     return chat_completion.choices[0].message.content
+
+def generate_scores(transcription, audio_emotion, emotion_analysis):
+    """
+    Generate scores for Vocabulary, Voice, and Expressions using the LLM.
+    """
+    system_message = """
+    You are an expert in speech analysis. Based on the provided transcription, audio emotion data, 
+    and facial emotion analysis, generate scores (out of 100) for the following categories:
+    - Vocabulary: Measures the richness and relevance of words.
+    - Voice: Assesses the expressiveness and emotional impact of vocal tone.
+    - Expressions: Evaluates the appropriateness of facial expressions.
+
+    Provide only the three scores in JSON format, like:
+    {"vocabulary": 85, "voice": 78, "expressions": 90}
+    """
+
+    user_message = f"""
+    Transcription: {transcription}
+
+    Audio Emotion Data: {audio_emotion}
+
+    Facial Emotion Analysis: {emotion_analysis.to_string(index=False) if not emotion_analysis.empty else "No facial data"}
+
+    Provide only the JSON output with numeric scores.
+    """
+
+    chat_completion = groq_client.chat.completions.create(
+        messages=[
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_message},
+        ],
+        model="llama-3.3-70b-versatile",
+    )
+
+    try:
+        # Extract JSON response from LLM output
+        scores = json.loads(chat_completion.choices[0].message.content)
+        return scores
+    except json.JSONDecodeError:
+        return {"vocabulary": 0, "voice": 0, "expressions": 0}  # Default in case of failure
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
