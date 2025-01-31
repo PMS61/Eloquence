@@ -27,6 +27,8 @@ export default function Login() {
         if (json.token) {
             console.log("Login Successful");
             localStorage.setItem('token', json.token);
+            localStorage.setItem('username', json.username);  // Store username
+            localStorage.setItem('userId', json.userId);      // Store user ID
             router.push(`/dashboard`); // Redirect to dashboard
         } else {
             console.log("Login Failed");

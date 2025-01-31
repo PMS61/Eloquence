@@ -1,18 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Menu,
   Grid,
   BarChart,
-  PieChart,
-  Settings,
-  LucideScanFace,
-  Plus,
   MessageCircle,
+  Plus,
 } from "lucide-react";
 import "./bg.css";
 
 export default function Sidebar() {
+  const [username, setUsername] = useState("");
+
+  // Fetch the username from local storage
+  useEffect(() => {
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
   return (
     <div>
       <aside className="fixed w-12 h-screen mr-6 text-white bg-gray-800 md:w-24 glass-bg">
@@ -44,7 +50,13 @@ export default function Sidebar() {
             </button>
           </Link>
         </nav>
+
+        {/* Display the username at the bottom */}
+        <div className="absolute bottom-4 left-0 right-0 text-center text-sm text-gray-300">
+          {username ? `Hi, ${username}` : "Loading..."}
+        </div>
       </aside>
+
       <style jsx>{`
         .glass-bg {
           border-top-left-radius: 0px;
