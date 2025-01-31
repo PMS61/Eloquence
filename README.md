@@ -1,13 +1,14 @@
 <h1 align="center">
   <a href="https://github.com/CommunityOfCoders/Inheritance-2024">
-    <img src="./Untitled.png" alt="CoC Inheritance 2024" width="500" height="166">
+    <img src="" alt="CoC Inheritance 2024" width="500" height="166">
   </a>
   <br>
- Eloquence
+     Eloquence 
 </h1>
 
 <div align="center">
-   Eloquence
+
+    Eloquence - AI driven public speaking tutor
 </div>
 <hr>
 
@@ -29,8 +30,7 @@
 </details>
 
 ## 📝Description
-
-
+Eloquence is an AI-powered app that enhances public speaking by providing feedback on pace, modulation, volume, facial expressions, and vocabulary. It offers personalized tips during practice sessions to help users refine their delivery, build confidence, and communicate more effectively in any setting, from presentations to casual conversations.
 
 ## 🔗Links
 
@@ -44,41 +44,51 @@
 
 ## 🤖Tech-Stack
 
-Mention all languages/libraries/frameworks used in your project **domain-wise**   
-You can use icons too - find them [here](https://github.com/get-icon/geticon) 
-
 #### Front-end
-- HTML
-- CSS
-- JavaScript
-- React
-- etc.
-
+- ![Next.js](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+- ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) 
 #### Back-end
-- NodeJS
-- ExpressJS
-- etc.
+
+- ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+
 
 #### Database
-- MongoDB
-- etc.
+- ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 
-#### nlp
--Ml
+#### DL Framework
+
+- ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
+- ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
+
 
 ## 📈Progress
-
 List down all the fully implemented features in your project
 
+- [x]  Vocabulary Analysis: The app analyzes the user's vocabulary, providing feedback on word choice, complexity, and variety.
+- [x]  Voice Analysis: The app evaluates the user's voice, including pace, modulation, and emotional tone, offering suggestions for improvement.
+- [x]  Facial Emotion Recognition: The app uses AI to detect and analyze facial expressions, providing insights into non-verbal communication.
+- [x]  Overall Report and Scoring: The app generates a comprehensive report and scores the user based on their performance in vocabulary, voice, and facial expression analysis.
 
 
-List down all the partially implemented features in your project
+
+
+
+
+
 
 ## 🔮Future Scope
+<strong>Real-Time Feedback:</strong> Implement real-time feedback during live speaking sessions
 
+<strong>Personalized training sessions : </strong> Allowing user to practice on a certain context and improve their public speaking
 
 ## 💸Applications
+<strong>Public Speaking Training: </strong> Ideal for individuals looking to improve their public speaking skills for presentations, speeches, and debates.
 
+<strong>Corporate Training: </strong>Companies can use Eloquence to train employees in effective communication, enhancing their presentation and interpersonal skills.
+
+<strong>Education:</strong> Students can benefit from personalized feedback to improve their oral communication skills, which are crucial for academic success and future career prospects.
+
+<strong>Job Interviews:</strong> Job seekers can practice and refine their interview skills, ensuring they make a positive impression on potential employers.
 
 ## 🛠Project Setup
 
@@ -88,36 +98,41 @@ git clone <url>
 ```
 2.Enter the client directory. Install all the required dependencies.
 ```bash
-  cd frontend
-  npm install
-  npm start
+  cd client
+  npm i
+  npm run dev
 ```
 
-3.To start the backend server:4
+3.To start the backend server:
+---
+First activate the Virtual enviroment
 ```bash
-  cd backend
-  npm install
-  npm start
+  cd server
+  pip install -r requirements.txt
+  flask run
 ```
 
 ## 👨‍💻Team Members
 
 Add names of your team members with their emails and links to their GitHub accounts
 
-- [Team Member 1 ](https://github.com/)
-- [Team Member 2 ](https://github.com/)
-- [Team Member 2 ](https://github.com/)
-- [Team Member 2 ](https://github.com/)
+- Prathamesh Sankhe: [GitHub](https://github.com/PMS61) | Email: pmsankhe_b23@it.vjti.ac.in
+- Soham Margaj: [GitHub](https://github.com/aasthachitroda) | Email: ssmargaj_b23@it.vjti.ac.in
+- Zoher Vohra: [GitHub](https://github.com/zohervohra) | Email: ztvohra_b23@it.vjti.ac.in
+- Dheer Joisher: [GitHub](https://github.com/YashPatil0105) | Email: drjoisher_b23@it.vjti.ac.in
 
 ## 👨‍🏫Mentors
 
 Add names of your mentors with their emails and links to their GitHub accounts
 
-- [Mentor 1 ]()):
-- [Mentor 2 ]():
+- [Mentor 1 Aaditya Padte](https://github.com/Aaditya8C): aadityajp0419@gmail.com
+- [Mentor 2 Vedant Kale](https://github.com/VedantKale08): vedantkale8114@gmail.com
+- [Mentor 3 Aniket Jadhav](https://github.com/DevAniket010): aj230375@gmail.com
+
 
 ## 📱Screenshots
 
 
 ![Screenshot alt text]( "screenshot")
+
 
