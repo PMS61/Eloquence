@@ -3,11 +3,11 @@
     <img src="./Untitled.png" alt="CoC Inheritance 2024" width="500" height="166">
   </a>
   <br>
- Project Name
+ Eloquence
 </h1>
 
 <div align="center">
-   //project name
+   Eloquence
 </div>
 <hr>
 
@@ -34,7 +34,7 @@
 
 ## 🔗Links
 
-- [GitHub Repository](https://github.com/)
+- [GitHub Repository](https://github.com/PMS61/Eloquence)
 - [Demo Video]()
 - [Drive Link to Screenshots of your project]()
 - [Hosted Website Link]()
