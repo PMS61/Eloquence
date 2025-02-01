@@ -29,6 +29,7 @@ const WebRTCRecorder = () => {
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [uploadedFileUrl, setUploadedFileUrl] = useState(null); // New state for uploaded file URL
   const [title, setTitle] = useState("");
 
   useEffect(() => {
@@ -112,13 +113,11 @@ const WebRTCRecorder = () => {
   const downloadRecording = () => {
     const blob = new Blob(recordedChunks, {
       type: isVideoEnabled ? "video/mp4" : "audio/wav",
-      type: isVideoEnabled ? "video/mp4" : "audio/wav",
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = url;
-    a.download = isVideoEnabled ? "recording.mp4" : "recording.wav";
     a.download = isVideoEnabled ? "recording.mp4" : "recording.wav";
     document.body.appendChild(a);
     a.click();
@@ -133,6 +132,7 @@ const WebRTCRecorder = () => {
         (!isVideoEnabled && file.type === "audio/wav")
       ) {
         setUploadedFile(file);
+        setUploadedFileUrl(URL.createObjectURL(file)); // Generate URL for preview
       } else {
         alert(
           `Invalid file type. Please upload a ${
@@ -210,7 +210,7 @@ const WebRTCRecorder = () => {
             className="mt-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
           >
             View Report
-        </button>
+          </button>
         </div>,
         {
           autoClose: false,
@@ -232,7 +232,7 @@ const WebRTCRecorder = () => {
         <Sidebar />
       </div>
       <div className="flex-1 p-4">
-      <div className="h-full flex flex-col bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg">
+        <div className="h-full flex flex-col bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg">
           <h1 className="text-3xl font-semibold text-center text-[#C9CBD0] py-4">
             Session Recording
           </h1>
@@ -299,7 +299,7 @@ const WebRTCRecorder = () => {
                     <Square size={20} />
                   </button>
                 )}
-                {recordedChunks.length > 0 && (
+                {(recordedChunks.length > 0 || uploadedFile) && (
                   <>
                     <button
                       onClick={downloadRecording}
@@ -318,7 +318,7 @@ const WebRTCRecorder = () => {
               </div>
 
               {/* File Upload and Upload Button */}
-              <div className="flex flex-col items-center space-y-4 w-full">
+              <div className="flex items-center justify-center space-x-4 w-full">
                 <label className="bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all cursor-pointer">
                   <span>Choose File</span>
                   <input
@@ -345,6 +345,7 @@ const WebRTCRecorder = () => {
         onClose={() => setShowModal(false)}
         recordedChunks={recordedChunks}
         isVideoEnabled={isVideoEnabled}
+        uploadedFileUrl={uploadedFileUrl} // Pass the uploaded file URL
       />
       <ContextDialog
         isOpen={showContextDialog}
@@ -352,7 +353,6 @@ const WebRTCRecorder = () => {
         onSave={handleContextSave}
         initialContext={context}
       />
-      
     </div>
   );
 };

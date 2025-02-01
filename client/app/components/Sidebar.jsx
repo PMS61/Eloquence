@@ -21,7 +21,7 @@ export default function Sidebar() {
 
   return (
     <div>
-      <aside className="fixed w-20 h-screen text-white bg-[#1E293B] border-r border-[#334155] shadow-lg">
+      <aside className="fixed w-20 h-screen p-2 text-white bg-[#1E293B] border-r border-[#334155] shadow-lg">
         {/* Logo */}
         <Link href="/">
           <div className="flex items-center justify-center mt-6">
@@ -50,17 +50,14 @@ export default function Sidebar() {
             </button>
           </Link>
           <Link href="/session">
-            <button className="flex flex-col items-center justify-center gap-2 py-3 px-4 mt-8 text-white bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] hover:opacity-90 w-full transition-all duration-200">
+            <button className="flex flex-col items-center justify-center gap-2 rounded-lg  py-3 px-4 mt-8 text-white bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] hover:opacity-90 w-full transition-all duration-200">
               <Plus size={24} />
               <span className="text-xs">New Session</span>
             </button>
           </Link>
         </nav>
 
-        {/* Display the username at the bottom */}
-        <div className="absolute bottom-4 left-0 right-0 text-center text-sm text-gray-300">
-          {username ? `Hi, ${username}` : "Loading..."}
-        </div>
+       
       </aside>
     </div>
   );
