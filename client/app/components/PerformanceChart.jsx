@@ -22,7 +22,7 @@ const PerformanceChart = ({ performanceData }) => {
     }));
 
     return (
-        <div className="w-full border-2 rounded-md p-2 glass-bg" style={{ minHeight: '300px' }}>
+        <div className="w-full border-2  border-slate-700 rounded-md p-2 bg-[#1E293B]" style={{ minHeight: '300px' }}>
             {/* ResponsiveContainer makes the chart fully responsive */}
             <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={chartData}>
