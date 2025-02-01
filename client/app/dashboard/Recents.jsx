@@ -52,6 +52,7 @@ const RecentSessions = ({ sessions }) => {
 
   return (
     <>
+    <div className='flex flex-col w-full items-center justify-center '>
     <div className="w-full overflow-hidden shadow-md rounded-lg border-2 border-slate-700"> {/* Updated border color */}
       <div className="max-h-[360px] overflow-y-auto">
         <table className="w-full text-center text-gray-500">
@@ -127,6 +128,7 @@ const RecentSessions = ({ sessions }) => {
         >
           Next
         </button>
+      </div>
       </div>
       </>
   );
