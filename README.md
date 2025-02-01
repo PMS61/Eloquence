@@ -117,9 +117,9 @@ First activate the Virtual enviroment
 Add names of your team members with their emails and links to their GitHub accounts
 
 - Prathamesh Sankhe: [GitHub](https://github.com/PMS61) | Email: pmsankhe_b23@it.vjti.ac.in
-- Soham Margaj: [GitHub](https://github.com/aasthachitroda) | Email: ssmargaj_b23@it.vjti.ac.in
+- Soham Margaj: [GitHub](https://github.com/soham555-maker) | Email: ssmargaj_b23@it.vjti.ac.in
 - Zoher Vohra: [GitHub](https://github.com/zohervohra) | Email: ztvohra_b23@it.vjti.ac.in
-- Dheer Joisher: [GitHub](https://github.com/YashPatil0105) | Email: drjoisher_b23@it.vjti.ac.in
+- Dheer Joisher: [GitHub](https://github.com/DheerJoisher) | Email: drjoisher_b23@it.vjti.ac.in
 
 ## 👨‍🏫Mentors
 
