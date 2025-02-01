@@ -34,7 +34,7 @@ export default function Sidebar() {
               <Grid size={30} />
             </button>
           </Link>
-          <Link href="/report">
+          <Link href="/allreports">
             <button className="flex justify-center items-center gap-4 py-2.5 px-2 text-white hover:bg-gray-700 w-full">
               <BarChart size={30} />
             </button>

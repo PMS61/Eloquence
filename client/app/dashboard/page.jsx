@@ -4,112 +4,38 @@ import PerformanceChart from '../components/PerformanceChart';
 import PerformanceMetrics from '../components/OverallScore';
 import RecentSessions from './Recents';
 import { useParams } from 'next/navigation';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import '../components/bg.css';
+
 export default function Dashboard() {
-   const { userId } = useParams();
-   const [userName, setUserName] = useState('');
+    const { userId } = useParams();
+    const [localUserId, setLocalUserId] = useState('');
 
-//    useEffect(() => {
-//     // Retrieve the token from localStorage
-//     const token = localStorage.getItem('token');
-
-//     if (!token) {
-//         // If there's no token, redirect to login
-//         router.push('/login');
-//     } else {
-//         // Fetch user details from the /protected route
-//         fetch("http://127.0.0.1:5000/auth/protected", {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({ token }),
-//         })
-//         .then((response) => response.json())
-//         .then((data) => {
-//             if (data.error) {
-//                 alert(data.error);
-//                 router.push('/login');
-//             } else {
-//                 // Set the username in state for display
-//                 setUserName(data.message.split(", ")[1].split("!")[0]); // Extracts the username
-//             }
-//         })
-//         .catch((error) => console.error("Error:", error));
-//     }
-// }, []);
-    // Sample performance data (in a real app, this would come from your backend)
-    const performanceData = {
-        labels: ['Session 1', 'Session 2', 'Session 3', 'Session 4', 'Session 5'], // x-axis labels
-        paceData: [70, 75, 78, 82, 85], // Pace scores for each session
-        modulationData: [65, 68, 72, 76, 79], // Modulation scores
-        clarityData: [80, 82, 85, 88, 90], // Clarity scores
-    };
-
-    const sessions = [
-        {
-          _id: '1',
-          sessionName: 'Impromptu Speaking',
-          Voice: '72/100',
-          BodyLanguage: '72/100',
-          Vocabulary: '72/100'
-        },
-        {
-          _id: '2',
-          sessionName: 'Impromptu Speaking',
-          Voice: '72/100',
-          BodyLanguage: '72/100',
-          Vocabulary: '72/100'
-        },
-        {
-          _id: '3',
-          sessionName: 'Impromptu Speaking',
-          Voice: '72/100',
-          BodyLanguage: '72/100',
-          Vocabulary: '72/100'
-        },
-        {
-          _id: '4',
-          sessionName: 'Impromptu Speaking',
-          Voice: '72/100',
-          BodyLanguage: '72/100',
-          Vocabulary: '72/100'
-        },
-        {
-          _id: '5',
-          sessionName: 'Impromptu Speaking',
-          Voice: '72/100',
-          BodyLanguage: '72/100',
-          Vocabulary: '72/100'
-        },
-        // Add other sessions...
-      ];
-    
-    const scores = {
-        pace: 80,
-        modulation: 65,
-        clarity: 75,
-    };
+    // Fetch userId from local storage when the component mounts
+    useEffect(() => {
+        const storedUserId = localStorage.getItem('userId');
+        if (storedUserId) {
+            setLocalUserId(storedUserId);
+        }
+    }, []);
 
     return (
         <div>
             <Sidebar />
             <div className="flex w-full static-bg min-h-screen max-h-full">
-                <div className="w-full h-full ">
-                
-                    
-                    <div className="flex flex-col mt-4 md:flex-row ml-16 md:ml-28 mx-1 mb-6"> {/* Stack vertically on small screens, horizontally on medium and larger screens */}
-                        <div className="w-full h-full  md:w-7/12"> {/* Full width on smaller screens */}
-                            <PerformanceChart performanceData={performanceData} />
+                <div className="w-full h-full">
+                    <div className="flex flex-col mt-4 md:flex-row ml-16 md:ml-28 mx-1 mb-6">
+                        <div className="w-full h-full md:w-7/12">
+                            {/* PerformanceChart now fetches its own data */}
+                            <PerformanceChart />
                         </div>
-                        <div className="flex-1  px-6 md: mt-4 md:mt-0"> {/* Add margin on larger screens */}
-                            <PerformanceMetrics scores={scores} />
+                        <div className="flex-1 px-6 md:mt-4 ">
+                            {/* Pass the userId from local storage to PerformanceMetrics */}
+                            <PerformanceMetrics userId={localUserId} />
                         </div>
-                        
                     </div>
                     <div className='flex ml-16 md:ml-28 mx-1'>
-                        <RecentSessions sessions={sessions}/>
+                        <RecentSessions />
                     </div>
                 </div>
             </div>

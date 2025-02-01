@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { Send } from "lucide-react";
 import { Satisfy, Playfair_Display } from "next/font/google";
@@ -26,6 +26,49 @@ export default function ChatPage() {
   ]);
   const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [userReports, setUserReports] = useState([]); // State to store user reports
+
+  // Fetch user reports when the component mounts
+  useEffect(() => {
+    const fetchUserReports = async () => {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        console.error("User ID not found");
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/user-reports-list?userId=${userId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch reports");
+        }
+        const data = await response.json();
+        setUserReports(data); // Store the fetched reports in state
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      }
+    };
+
+    fetchUserReports();
+  }, []);
+
+  // Transform user reports into a string
+  const transformReportsToString = () => {
+    return userReports
+      .map((report, index) => {
+        return `Session ${index + 1}:
+- Title: ${report.title || "Untitled Session"}
+- Context: ${report.context || "No context available"}
+- Transcription: ${report.transcription || "No transcription available"}
+- Voice Score: ${report.scores.voice}
+- Expressions Score: ${report.scores.expressions}
+- Vocabulary Score: ${report.scores.vocabulary}
+- Vocabulary Report: ${report.vocabulary_report || "No vocabulary report available"}
+- Speech Report: ${report.speech_report || "No speech report available"}
+- Expression Report: ${report.expression_report || "No expression report available"}`;
+      })
+      .join("\n\n");
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -39,14 +82,17 @@ export default function ChatPage() {
     console.log("Sending message to API:", userMessage);
 
     try {
+      // Transform reports into a string
+      const reportsString = transformReportsToString();
+
       const response = await fetch(
         "https://aurum79-langflow.hf.space/api/v1/run/ffd2d954-40e6-41a8-aa0d-63eb0f14e169?stream=false",
         {
           method: "POST",
           headers: {
-            "Authorization": "Bearer <TOKEN>",
+            Authorization: "Bearer <TOKEN>",
             "Content-Type": "application/json",
-            "x-api-key": process.env.NEXT_PUBLIC_LANGFLOW_API_KEY
+            "x-api-key": process.env.NEXT_PUBLIC_LANGFLOW_API_KEY,
           },
           body: JSON.stringify({
             input_value: userMessage.content,
@@ -57,8 +103,10 @@ export default function ChatPage() {
               "ChatOutput-gop4R": {},
               "GroqModel-akwmH": {},
               "CombineText-OgpZW": {},
-              "TextInput-LiP6A": {}
-            }
+              "TextInput-LiP6A": {
+                value: reportsString, // Pass the reports string as a tweak
+              },
+            },
           }),
         }
       );
@@ -93,11 +141,13 @@ export default function ChatPage() {
     <div>
       <Sidebar />
       <div className="flex w-full max-h-full min-h-screen static-bg">
-        <div className="w-full h-full">
-          <div className="flex flex-col mx-4 mt-4 ml-16 md:ml-28">
-            <div className="glass-bg w-full h-[85vh] flex flex-col rounded-lg overflow-hidden">
+        <div className="w-full h-full ">
+          <div className="flex flex-col mx-4 ml-16 md:ml-28">
+            <div className="glass-bg w-full min-h-screen flex flex-col rounded-lg overflow-hidden">
               <div className="p-4 border-b border-gray-700">
-                <h1 className={`${satisfy.className} text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text`}>
+                <h1
+                  className={`${satisfy.className} text-3xl md:text-4xl font-bold text-transparent bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text`}
+                >
                   Chat Assistant
                 </h1>
               </div>
@@ -132,10 +182,7 @@ export default function ChatPage() {
                 )}
               </div>
 
-              <form
-                onSubmit={handleSendMessage}
-                className="p-4 border-t border-gray-700"
-              >
+              <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-700">
                 <div className="flex gap-4">
                   <input
                     type="text"

@@ -1,10 +1,38 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './bg.css';
 
-const PerformanceMetrics = ({ scores }) => {
-    const { pace, modulation, clarity } = scores;
+const PerformanceMetrics = ({ userId }) => {
+    const [scores, setScores] = useState({ pace: 0, modulation: 0, clarity: 0 });
+    const [reports, setReports] = useState({
+        voice_report: '',
+        expressions_report: '',
+        vocabulary_report: ''
+    });
+
+    useEffect(() => {
+        const fetchOverallScores = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/user-reports?userId=${userId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch overall scores');
+                }
+                const data = await response.json();
+                setScores({
+                    pace: data.avg_voice,
+                    modulation: data.avg_expressions,
+                    clarity: data.avg_vocabulary
+                });
+                setReports(data.overall_reports);
+            } catch (error) {
+                console.error('Error fetching overall scores:', error);
+            }
+        };
+
+        fetchOverallScores();
+    }, [userId]);
 
     const colors = {
         pace: "#00C853",
@@ -18,8 +46,8 @@ const PerformanceMetrics = ({ scores }) => {
             <div className="w-full md:w-1/3 glass-bg text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
                 <div className="w-24 h-24">
                     <CircularProgressbar
-                        value={pace}
-                        text={`${pace}%`}
+                        value={scores.pace}
+                        text={`${scores.pace}%`}
                         styles={buildStyles({
                             pathColor: colors.pace,
                             textColor: '#ffffff',
@@ -28,7 +56,7 @@ const PerformanceMetrics = ({ scores }) => {
                     />
                 </div>
                 <p className="text-sm text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, sapiente!
+                    {reports.voice_report}
                 </p>
             </div>
 
@@ -36,8 +64,8 @@ const PerformanceMetrics = ({ scores }) => {
             <div className="w-full md:w-1/3 glass-bg text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
                 <div className="w-24 h-24">
                     <CircularProgressbar
-                        value={modulation}
-                        text={`${modulation}%`}
+                        value={scores.modulation}
+                        text={`${scores.modulation}%`}
                         styles={buildStyles({
                             pathColor: colors.modulation,
                             textColor: '#ffffff',
@@ -46,7 +74,7 @@ const PerformanceMetrics = ({ scores }) => {
                     />
                 </div>
                 <p className="text-sm text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, sapiente!
+                    {reports.expressions_report}
                 </p>
             </div>
 
@@ -54,8 +82,8 @@ const PerformanceMetrics = ({ scores }) => {
             <div className="w-full md:w-1/3 glass-bg text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
                 <div className="w-24 h-24">
                     <CircularProgressbar
-                        value={clarity}
-                        text={`${clarity}%`}
+                        value={scores.clarity}
+                        text={`${scores.clarity}%`}
                         styles={buildStyles({
                             pathColor: colors.clarity,
                             textColor: '#ffffff',
@@ -64,7 +92,7 @@ const PerformanceMetrics = ({ scores }) => {
                     />
                 </div>
                 <p className="text-sm text-center">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, sapiente!
+                    {reports.vocabulary_report}
                 </p>
             </div>
         </div>

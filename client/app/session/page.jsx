@@ -8,8 +8,12 @@ import PreviewModal from "./preview";
 import Sidebar from "../components/Sidebar";
 import "../components/bg.css";
 import ContextDialog from "./context";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
 
 const WebRTCRecorder = () => {
+  const router = useRouter();
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -24,7 +28,8 @@ const WebRTCRecorder = () => {
   const [isContextSaved, setIsContextSaved] = useState(false);
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState(null); // State for uploaded file
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     async function getMedia() {
@@ -50,8 +55,9 @@ const WebRTCRecorder = () => {
     };
   }, [isVideoEnabled]);
 
-  const handleContextSave = (text) => {
+  const handleContextSave = ({ title, text }) => {
     setContext(text);
+    setTitle(title);
     setIsContextSaved(true);
   };
 
@@ -61,7 +67,7 @@ const WebRTCRecorder = () => {
 
   const startRecording = () => {
     if (stream) {
-      const options = { mimeType: "video/mp4" }; // Set MIME type to MP4
+      const options = { mimeType: "video/mp4" };
       const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       mediaRecorder.ondataavailable = handleDataAvailable;
@@ -105,13 +111,13 @@ const WebRTCRecorder = () => {
 
   const downloadRecording = () => {
     const blob = new Blob(recordedChunks, {
-      type: isVideoEnabled ? "video/mp4" : "audio/wav", // Use MP4 for video
+      type: isVideoEnabled ? "video/mp4" : "audio/wav",
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = url;
-    a.download = isVideoEnabled ? "recording.mp4" : "recording.wav"; // Save as MP4
+    a.download = isVideoEnabled ? "recording.mp4" : "recording.wav";
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
@@ -120,7 +126,6 @@ const WebRTCRecorder = () => {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Validate file type based on mode
       if (
         (isVideoEnabled && file.type === "video/mp4") ||
         (!isVideoEnabled && file.type === "audio/wav")
@@ -143,13 +148,28 @@ const WebRTCRecorder = () => {
     }
 
     setLoading(true);
+
+    toast.info(
+      <div>
+        <p>Report will be processed in some time.</p>
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+        >
+          Go to Dashboard
+        </button>
+      </div>,
+      {
+        autoClose: false,
+        closeOnClick: false,
+      }
+    );
+
     const formData = new FormData();
 
     if (uploadedFile) {
-      // Use the uploaded file
       formData.append("file", uploadedFile);
     } else {
-      // Use the recorded chunks
       const blob = new Blob(recordedChunks, {
         type: isVideoEnabled ? "video/mp4" : "audio/wav",
       });
@@ -157,7 +177,15 @@ const WebRTCRecorder = () => {
     }
 
     formData.append("context", context);
+    formData.append("title", title);
     formData.append("mode", isVideoEnabled ? "video" : "audio");
+
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      alert("User ID not found. Please log in again.");
+      return;
+    }
+    formData.append("userId", userId);
 
     try {
       const response = await fetch("http://localhost:5000/upload", {
@@ -166,8 +194,30 @@ const WebRTCRecorder = () => {
       });
       const data = await response.json();
       setReport(data);
+
+      toast.success(
+        <div>
+          <p>Report is generated.</p>
+          <button
+            onClick={() =>
+              router.push({
+                pathname: "/report",
+                query: { report: JSON.stringify(data) },
+              })
+            }
+            className="mt-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+          >
+            View Report
+        </button>
+        </div>,
+        {
+          autoClose: false,
+          closeOnClick: false,
+        }
+      );
     } catch (error) {
       console.error("Error uploading file:", error);
+      toast.error("Error uploading file. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -175,6 +225,7 @@ const WebRTCRecorder = () => {
 
   return (
     <div className="flex static-bg min-h-screen max-h-full">
+      <ToastContainer />
       <div className="w-16 md:w-28">
         <Sidebar />
       </div>
@@ -255,7 +306,6 @@ const WebRTCRecorder = () => {
                   </>
                 )}
               </div>
-              {/* File Upload Input */}
               <input
                 type="file"
                 accept={isVideoEnabled ? "video/mp4" : "audio/wav"}
@@ -285,20 +335,6 @@ const WebRTCRecorder = () => {
         onSave={handleContextSave}
         initialContext={context}
       />
-      {report && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded-lg">
-            <h2 className="text-xl font-bold">Report</h2>
-            <pre>{JSON.stringify(report, null, 2)}</pre>
-            <button
-              onClick={() => setReport(null)}
-              className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

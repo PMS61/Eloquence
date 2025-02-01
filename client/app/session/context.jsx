@@ -6,6 +6,7 @@ import "../components/bg.css";
 const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
   const [text, setText] = useState(""); // User-entered text
   const [uploadedText, setUploadedText] = useState(""); // For script files
+  const [title, setTitle] = useState(""); // New state for title
 
   useEffect(() => {
     if (isOpen && initialContext) {
@@ -14,7 +15,7 @@ const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
   }, [isOpen, initialContext]);
 
   const handleSave = () => {
-    onSave(text); // Save user-entered text
+    onSave({ title, text }); // Save both title and text
     onClose(); // Close dialog
   };
 
@@ -51,6 +52,17 @@ const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="glass-bg p-4 rounded-lg shadow-lg w-96 max-h-screen overflow-auto">
         <h2 className="text-xl text-white font-semibold mb-4">Enter Context</h2>
+
+        {/* Title Input */}
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-2 border rounded-lg mb-4 text-white bg-gray-800"
+          placeholder="Enter title for the session..."
+        />
+
+        {/* Context Textarea */}
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
