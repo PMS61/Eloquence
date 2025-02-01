@@ -22,23 +22,19 @@ export default function Analysis() {
       }
 
       try {
-        // Check if the user was redirected from the toast (query contains report data)
         const queryParams = new URLSearchParams(window.location.search);
         const reportFromQuery = queryParams.get("report");
 
         if (reportFromQuery) {
-          // If report data is present in the query, decode and use it
           const parsedReport = JSON.parse(decodeURIComponent(reportFromQuery));
           setReport(parsedReport);
         } else {
-          // If no report data in the query, fetch the latest report for the user
           const response = await fetch(`http://localhost:5000/user-reports-list?userId=${userId}`);
           if (!response.ok) {
             throw new Error("Failed to fetch reports");
           }
           const reports = await response.json();
           if (reports.length > 0) {
-            // Use the most recent report
             setReport(reports[reports.length - 1]);
           } else {
             setError("No reports found for the user.");
@@ -72,7 +68,6 @@ export default function Analysis() {
         <Sidebar />
       </div>
       <div className="flex flex-col justify-center items-center w-full min-h-screen max-h-full p-4">
-        {/* Pass the report as a prop to the Scores component */}
         <Scores report={report} />
       </div>
     </div>

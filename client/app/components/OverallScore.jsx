@@ -4,7 +4,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './bg.css';
 
-const PerformanceMetrics = ({ userId }) => {
+const PerformanceMetrics = () => {
     const [scores, setScores] = useState({ pace: 0, modulation: 0, clarity: 0 });
     const [reports, setReports] = useState({
         voice_report: '',
@@ -14,17 +14,26 @@ const PerformanceMetrics = ({ userId }) => {
 
     useEffect(() => {
         const fetchOverallScores = async () => {
+            const userId = localStorage.getItem('userId');
+            if (!userId) {
+                console.error('User ID not found');
+                return;
+            }
+
             try {
                 const response = await fetch(`http://localhost:5000/user-reports?userId=${userId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch overall scores');
                 }
                 const data = await response.json();
+                
+                // Map the fetched data to the scores and reports state
                 setScores({
                     pace: data.avg_voice,
                     modulation: data.avg_expressions,
                     clarity: data.avg_vocabulary
                 });
+
                 setReports(data.overall_reports);
             } catch (error) {
                 console.error('Error fetching overall scores:', error);
@@ -32,7 +41,7 @@ const PerformanceMetrics = ({ userId }) => {
         };
 
         fetchOverallScores();
-    }, [userId]);
+    }, []);
 
     const colors = {
         pace: "#00C853",
@@ -44,7 +53,7 @@ const PerformanceMetrics = ({ userId }) => {
         <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full p-4">
             {/* Pace Metric */}
             <div className="w-full md:w-1/3 bg-[#1E293B] text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
-                <div className="w-24 h-24">
+                <div className="w-40 h-40">
                     <CircularProgressbar
                         value={scores.pace}
                         text={`${scores.pace}%`}
@@ -55,14 +64,14 @@ const PerformanceMetrics = ({ userId }) => {
                         })}
                     />
                 </div>
-                <p className="text-sm text-center">
-                    {reports.voice_report}
+                <p className="text-lg text-center">
+                    Voice
                 </p>
             </div>
 
             {/* Modulation Metric */}
             <div className="w-full md:w-1/3 bg-[#1E293B] text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
-                <div className="w-24 h-24">
+                <div className="w-40 h-40">
                     <CircularProgressbar
                         value={scores.modulation}
                         text={`${scores.modulation}%`}
@@ -73,14 +82,14 @@ const PerformanceMetrics = ({ userId }) => {
                         })}
                     />
                 </div>
-                <p className="text-sm text-center">
-                    {reports.expressions_report}
+                <p className="text-lg text-center">
+                    Expressions
                 </p>
             </div>
 
             {/* Clarity Metric */}
-            <div className="w-full md:w-1/3 bg-[#1E293B] text-white p-4 border-2  border-slate-700 rounded-lg flex flex-col items-center gap-4">
-                <div className="w-24 h-24">
+            <div className="w-full md:w-1/3 bg-[#1E293B] text-white p-4 border-2   rounded-lg flex flex-col items-center gap-4">
+                <div className="w-40 h-40">
                     <CircularProgressbar
                         value={scores.clarity}
                         text={`${scores.clarity}%`}
@@ -91,9 +100,9 @@ const PerformanceMetrics = ({ userId }) => {
                         })}
                     />
                 </div>
-                <p className="text-sm text-center">
-                    {reports.vocabulary_report}
-                </p>
+                <p className="text-lg text-center">
+                    Vocabulary
+                    </p>
             </div>
         </div>
     );

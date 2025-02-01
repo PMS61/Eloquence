@@ -19,7 +19,7 @@ const Scores = ({ report }) => {
     {
       label: "Vocabulary",
       value: report?.scores?.vocabulary || 0,
-      color: "#4CAF50", // Green for good scores
+      color: "#00C853", // Green for vocabulary
     },
     {
       label: "Voice",
@@ -56,7 +56,7 @@ const Scores = ({ report }) => {
         metrics.map((metric, index) => (
           <div
             key={index}
-            className="flex glass-bg rounded-md shadow-lg p-6 items-center gap-4"
+            className="flex bg-[#1E293B] rounded-md shadow-lg p-6 items-center gap-4"
           >
             <div className="items-center p-6">
               <CircularProgressbar
@@ -67,7 +67,7 @@ const Scores = ({ report }) => {
                 styles={buildStyles({
                   textColor: "#fff",
                   pathColor: metric.value > 50 ? metric.color : "#FF4500", // Red for low scores
-                  trailColor: "#d6d6d6",
+                  trailColor: "#333", // Dark trail color
                   textSize: "14px",
                 })}
               />

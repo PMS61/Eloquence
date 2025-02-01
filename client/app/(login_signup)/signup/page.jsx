@@ -52,7 +52,7 @@ export default function SignUp() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen px-4 bg-[#0F172A]" id='background'>
+        <div className="flex items-center justify-center min-h-screen px-4 bg-[#0F172A]" >
             <section className="w-full max-w-md rounded-lg shadow-lg bg-[#1E293B] p-8 border border-[#334155]">
                 <h1 className="text-2xl font-bold text-center text-[#C9CBD0] mb-6">
                     Sign up for an account

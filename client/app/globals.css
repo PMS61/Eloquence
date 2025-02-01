@@ -2,4 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* styles/global.css */
 
+/* styles/global.css */
+
+/* styles/global.css */
+
+body {
+    background: 
+      /* horizontal and vertical lines */
+      conic-gradient(from 90deg at 1px 1px, 
+        transparent 25%, #222222 0%) 
+        calc(-1 * 0.5px) calc(-1 * 0.5px) / 1em 1em,
+      /* main diagonal */
+      linear-gradient(45deg, 
+        transparent calc(50% + calc(-1 * 0.5px)), 
+        #484015 0 calc(50% + 0.5px), transparent 0) 0 0 / calc(2 * 1em) calc(2 * 1em),
+      /* secondary diagonal */
+      linear-gradient(-45deg, 
+        transparent calc(50% + calc(-1 * 0.5px)), 
+        #482914 0 calc(50% + 0.5px), transparent 0) 0 0 / calc(2 * 1em) calc(2 * 1em);
+  
+    height: 100vh; /* Full viewport height */
+    margin: 0; /* Remove margin */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    background-color: #1B1F30; /* Dark background for body */
+  }
+  
+  

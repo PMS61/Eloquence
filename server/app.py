@@ -242,6 +242,9 @@ def generate_overall_reports(user_reports):
     """
     Generate three separate overall reports for Voice, Expressions, and Vocabulary.
     """
+    # Convert ObjectId fields to strings in user_reports
+    user_reports = convert_objectid_to_string(user_reports)
+
     # Generate Voice Report
     voice_system_message = """
     You are an expert in speech analysis. Based on the provided reports, generate an overall report summarizing the user's performance in terms of Voice (emotional tone, clarity, and expressiveness).

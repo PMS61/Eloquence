@@ -232,7 +232,7 @@ const WebRTCRecorder = () => {
         <Sidebar />
       </div>
       <div className="flex-1 p-4">
-        <div className="h-full flex flex-col bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg">
+      <div className="h-full flex flex-col bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg">
           <h1 className="text-3xl font-semibold text-center text-[#C9CBD0] py-4">
             Session Recording
           </h1>
@@ -352,20 +352,7 @@ const WebRTCRecorder = () => {
         onSave={handleContextSave}
         initialContext={context}
       />
-      {report && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-[#1E293B] p-6 rounded-lg border border-[#334155]">
-            <h2 className="text-xl font-bold text-[#C9CBD0]">Report</h2>
-            <pre className="text-[#C9CBD0]">{JSON.stringify(report, null, 2)}</pre>
-            <button
-              onClick={() => setReport(null)}
-              className="mt-4 bg-gradient-to-r from-[#FB7085] to-[#FFA07A] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+      
     </div>
   );
 };

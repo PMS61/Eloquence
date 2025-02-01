@@ -48,74 +48,73 @@ const UserReportsList = () => {
 
   return (
     <>
-    <div className="flex ">
-    <div>
-    <Sidebar />
-    </div>
-    <div className="static-bg flex flex-col w-full items-center justify-center p-3">
-    <div className="w-3/4 space-y-4   min-h-screen mx-auto ">
-      {reports.map((report) => (
-        <div
-          key={report._id}
-          onClick={() => {
-            // Construct the URL with the report data as a query parameter
-            const url = `/report?report=${encodeURIComponent(JSON.stringify(report))}`;
-            router.push(url);
-          }}
-          className="flex glass-bg rounded-md shadow-lg p-8 items-center gap-4 cursor-pointer  transition-colors"
-        >
-          <div className="flex-1">
-            <h2 className="text-xl font-semibold text-white">{report.title}</h2>
-          </div>
-          <div className="flex gap-4">
-            <div className="w-24 h-24">
-              <CircularProgressbar
-                value={report.scores.vocabulary}
-                maxValue={100}
-                text={`${report.scores.vocabulary}`}
-                styles={buildStyles({
-                  textColor: "#fff",
-                  pathColor: report.scores.vocabulary > 50 ? "#4CAF50" : "#FF4500",
-                  trailColor: "#d6d6d6",
-                  textSize: "24px",
-                })}
-              />
-              <p className="text-center text-white mt-2">Vocabulary</p>
-            </div>
-            <div className="w-24 h-24">
-              <CircularProgressbar
-                value={report.scores.voice}
-                maxValue={100}
-                text={`${report.scores.voice}`}
-                styles={buildStyles({
-                  textColor: "#fff",
-                  pathColor: report.scores.voice > 50 ? "#4CAF50" : "#FF4500",
-                  trailColor: "#d6d6d6",
-                  textSize: "24px",
-                })}
-              />
-              <p className="text-center text-white mt-2">Voice</p>
-            </div>
-            <div className="w-24 h-24">
-              <CircularProgressbar
-                value={report.scores.expressions}
-                maxValue={100}
-                text={`${report.scores.expressions}`}
-                styles={buildStyles({
-                  textColor: "#fff",
-                  pathColor: report.scores.expressions > 50 ? "#4CAF50" : "#FF4500",
-                  trailColor: "#d6d6d6",
-                  textSize: "24px",
-                })}
-              />
-              <p className="text-center text-white mt-2">Expressions</p>
-            </div>
+      <div className="flex">
+        <div>
+          <Sidebar />
+        </div>
+        <div className="static-bg flex flex-col w-full items-center justify-center p-3">
+          <div className="w-3/4 space-y-4 min-h-screen mx-auto">
+            {reports.map((report) => (
+              <div
+                key={report._id}
+                onClick={() => {
+                  const url = `/report?report=${encodeURIComponent(JSON.stringify(report))}`;
+                  router.push(url);
+                }}
+                className="flex bg-[#1E293B] border-stone-200 border-[1px] rounded-md shadow-lg p-8 items-center gap-4 cursor-pointer transition-colors"
+              >
+                <div className="flex-1">
+                  <h2 className="text-xl font-semibold text-white">{report.title}</h2>
+                </div>
+                <div className="flex gap-4">
+                  <div className="w-24 h-24">
+                    <CircularProgressbar
+                      value={report.scores.vocabulary}
+                      maxValue={100}
+                      text={`${report.scores.vocabulary}`}
+                      styles={buildStyles({
+                        textColor: "#fff",
+                        pathColor: report.scores.vocabulary > 50 ? "#00C853" : "#FF4500",
+                        trailColor: "#333",
+                        textSize: "24px",
+                      })}
+                    />
+                    <p className="text-center text-white mt-2">Vocabulary</p>
+                  </div>
+                  <div className="w-24 h-24">
+                    <CircularProgressbar
+                      value={report.scores.voice}
+                      maxValue={100}
+                      text={`${report.scores.voice}`}
+                      styles={buildStyles({
+                        textColor: "#fff",
+                        pathColor: report.scores.voice > 50 ? "#2196F3" : "#FF4500",
+                        trailColor: "#333",
+                        textSize: "24px",
+                      })}
+                    />
+                    <p className="text-center text-white mt-2">Voice</p>
+                  </div>
+                  <div className="w-24 h-24">
+                    <CircularProgressbar
+                      value={report.scores.expressions}
+                      maxValue={100}
+                      text={`${report.scores.expressions}`}
+                      styles={buildStyles({
+                        textColor: "#fff",
+                        pathColor: report.scores.expressions > 50 ? "#FFC107" : "#FF4500",
+                        trailColor: "#333",
+                        textSize: "24px",
+                      })}
+                    />
+                    <p className="text-center text-white mt-2">Expressions</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-    </div>
-    </div>
+      </div>
     </>
   );
 };
