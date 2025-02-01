@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import '../../components/bg.css'
+import '../../components/bg.css';
 import Link from 'next/link';
 
 export default function Login() {
@@ -41,19 +41,19 @@ export default function Login() {
     };
 
     return (
-        <section className="= flex items-center justify-center min-h-screen px-4   bg-gray-900 " id='background'>
-            <div className="w-lg md:w-1/3 glass-bg  rounded-lg shadow border bg-gray-800 border-gray-700 p-6 sm:p-6 md:p-8">
-                <h1 className="text-lg font-bold text-center text-white m-2 ">
+        <section className="flex items-center justify-center min-h-screen px-4 bg-[#0F172A]" id='background'>
+            <div className="w-full max-w-md rounded-lg shadow-lg bg-[#1E293B] p-8 border border-[#334155]">
+                <h1 className="text-2xl font-bold text-center text-[#C9CBD0] mb-6">
                     Log in to your account
                 </h1>
-                <form className="space-y-4 m-2" onSubmit={handleSubmit}>
+                <form className="space-y-6" onSubmit={handleSubmit}>
                     <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-white m-2">Your email</label>
+                        <label htmlFor="email" className="block text-sm font-medium text-[#C9CBD0] mb-2">Your email</label>
                         <input
                             type="email"
                             name="email"
                             id="email"
-                            className="w-full p-2 text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            className="w-full p-3 text-sm bg-[#334155] border border-[#3ABDF8] rounded-lg focus:ring-2 focus:ring-[#818CF8] focus:border-[#818CF8] placeholder-[#C9CBD0]"
                             placeholder="name@company.com"
                             required
                             onChange={onChange}
@@ -61,32 +61,34 @@ export default function Login() {
                         />
                     </div>
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-white m-2">Password</label>
+                        <label htmlFor="password" className="block text-sm font-medium text-[#C9CBD0] mb-2">Password</label>
                         <input
                             type="password"
                             name="password"
                             id="password"
                             placeholder="••••••••"
-                            className="w-full p-2 text-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                            className="w-full p-3 text-sm bg-[#334155] border border-[#3ABDF8] rounded-lg focus:ring-2 focus:ring-[#818CF8] focus:border-[#818CF8] placeholder-[#C9CBD0]"
                             required
                             onChange={onChange}
                             value={credentials.password}
                         />
                     </div>
                     <div className="w-full flex justify-center items-center">
-                    <button
-                        type="submit"
-                        className=" px-8 py-3 text-white text-sm bg-gray-900 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                        Login
-                    </button>
+                        <button
+                            type="submit"
+                            className="w-full px-8 py-3 text-white text-sm bg-[#3ABDF8] hover:bg-[#2AA8E0] focus:ring-4 focus:outline-none focus:ring-[#818CF8] font-medium rounded-lg transition duration-300"
+                        >
+                            Login
+                        </button>
                     </div>
-                    <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+                    <p className="text-s text-center text-[#C9CBD0]">
                         Don’t have an account yet?  
-                        <Link href="/signup" className="font-medium text-primary-600 hover:underline dark:text-primary-500"> Sign up</Link>
+                        <Link href="/signup" className="font-medium text-[#818CF8] hover:underline">
+                            Sign up
+                        </Link>
                     </p>
                 </form>
             </div>
-           
         </section>
     );
 }

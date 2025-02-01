@@ -43,7 +43,7 @@ const PerformanceMetrics = ({ userId }) => {
     return (
         <div className="flex flex-col md:flex-row justify-center items-center gap-4 w-full p-4">
             {/* Pace Metric */}
-            <div className="w-full md:w-1/3 glass-bg text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
+            <div className="w-full md:w-1/3 bg-[#1E293B] text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
                 <div className="w-24 h-24">
                     <CircularProgressbar
                         value={scores.pace}
@@ -61,7 +61,7 @@ const PerformanceMetrics = ({ userId }) => {
             </div>
 
             {/* Modulation Metric */}
-            <div className="w-full md:w-1/3 glass-bg text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
+            <div className="w-full md:w-1/3 bg-[#1E293B] text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
                 <div className="w-24 h-24">
                     <CircularProgressbar
                         value={scores.modulation}
@@ -79,7 +79,7 @@ const PerformanceMetrics = ({ userId }) => {
             </div>
 
             {/* Clarity Metric */}
-            <div className="w-full md:w-1/3 glass-bg text-white p-4 border-2 rounded-lg flex flex-col items-center gap-4">
+            <div className="w-full md:w-1/3 bg-[#1E293B] text-white p-4 border-2  border-slate-700 rounded-lg flex flex-col items-center gap-4">
                 <div className="w-24 h-24">
                     <CircularProgressbar
                         value={scores.clarity}

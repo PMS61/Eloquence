@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { BsFillMicFill } from 'react-icons/bs'; // Microphone icon
+import { useEffect, useState } from "react";
+import { BsFillMicFill } from "react-icons/bs";
 
 const MicrophonePulse = ({ isRecording }) => {
-  const [volume, setVolume] = useState(0); // Track the volume level
+  const [volume, setVolume] = useState(0);
 
   useEffect(() => {
     let audioContext;
@@ -16,8 +16,7 @@ const MicrophonePulse = ({ isRecording }) => {
       analyser.smoothingTimeConstant = 0.8;
       analyser.fftSize = 1024;
 
-      // Set up microphone access
-      navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
         microphone = audioContext.createMediaStreamSource(stream);
         javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
 
@@ -28,7 +27,7 @@ const MicrophonePulse = ({ isRecording }) => {
         javascriptNode.onaudioprocess = () => {
           const array = new Uint8Array(analyser.frequencyBinCount);
           analyser.getByteFrequencyData(array);
-          const average = array.reduce((a, b) => a + b) / array.length; // Average volume
+          const average = array.reduce((a, b) => a + b) / array.length;
           setVolume(average);
         };
       });
@@ -40,18 +39,22 @@ const MicrophonePulse = ({ isRecording }) => {
   }, [isRecording]);
 
   return (
-    <div className=" flex justify-center items-center rounded-lg w-96 h-96">
-      {/* Pulsating circle around the microphone */}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-base-100 text-base-content">
       <div
-        className="flex justify-center items-center rounded-full bg-gray-700  m-2"
+        className="relative flex items-center justify-center rounded-full bg-primary shadow-lg transition-all ease-in-out duration-200"
         style={{
-          width: `${180 + volume * 1}px`, // Adjust size dynamically based on volume
-          height: `${180 + volume * 1}px`,
-          transition: 'width 0.2s ease, height 0.2s ease',
+          width: `${150 + volume * 1.2}px`,
+          height: `${150 + volume * 1.2}px`,
+          boxShadow: `0px 0px ${10 + volume / 5}px #3ABDF8`,
         }}
-      ><BsFillMicFill className="text-white " size={120} /></div>
-      {/* Static microphone icon */}
-      
+      >
+        <BsFillMicFill className="text-neutral" size={100} />
+      </div>
+      {isRecording ? (
+        <p className="mt-4 text-secondary text-lg animate-pulse">Listening...</p>
+      ) : (
+        <p className="mt-4 text-error">Not Recording</p>
+      )}
     </div>
   );
 };

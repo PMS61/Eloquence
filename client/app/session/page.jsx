@@ -68,6 +68,7 @@ const WebRTCRecorder = () => {
   const startRecording = () => {
     if (stream) {
       const options = { mimeType: "video/mp4" };
+      const options = { mimeType: "video/mp4" };
       const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       mediaRecorder.ondataavailable = handleDataAvailable;
@@ -112,11 +113,13 @@ const WebRTCRecorder = () => {
   const downloadRecording = () => {
     const blob = new Blob(recordedChunks, {
       type: isVideoEnabled ? "video/mp4" : "audio/wav",
+      type: isVideoEnabled ? "video/mp4" : "audio/wav",
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.style.display = "none";
     a.href = url;
+    a.download = isVideoEnabled ? "recording.mp4" : "recording.wav";
     a.download = isVideoEnabled ? "recording.mp4" : "recording.wav";
     document.body.appendChild(a);
     a.click();
@@ -224,17 +227,18 @@ const WebRTCRecorder = () => {
   };
 
   return (
-    <div className="flex static-bg min-h-screen max-h-full">
+    <div className="flex min-h-screen max-h-full bg-[#0F172A]">
       <ToastContainer />
       <div className="w-16 md:w-28">
         <Sidebar />
       </div>
       <div className="flex-1 p-4">
-        <div className="h-full flex flex-col glass-bg">
-          <h1 className="text-3xl font-semibold text-center text-white py-2">
+        <div className="h-full flex flex-col bg-[#1E293B] rounded-lg border border-[#334155] shadow-lg">
+          <h1 className="text-3xl font-semibold text-center text-[#C9CBD0] py-4">
             Session Recording
           </h1>
           <div className="flex-1 flex flex-col items-center justify-center px-4">
+            {/* Video or Microphone */}
             <div className="w-full h-[60vh] flex justify-center items-center">
               {isVideoEnabled ? (
                 <video
@@ -242,18 +246,23 @@ const WebRTCRecorder = () => {
                   autoPlay
                   playsInline
                   muted
-                  className="w-full h-full object-contain rounded-lg transform scale-x-[-1]"
+                  className="w-full h-full object-contain rounded-lg border-4 border-[#3ABDF8]"
                 />
               ) : (
                 <MicrophonePulse isRecording={isRecording} />
               )}
             </div>
-            <div className="flex flex-col items-center space-y-2 mt-2">
+
+            {/* Controls Section */}
+            <div className="w-full max-w-2xl flex flex-col items-center space-y-4 mt-4">
+              {/* Timer */}
               <Timer
                 isRecording={isRecording}
                 isPaused={isPaused}
                 reset={!isRecording}
               />
+
+              {/* Toggle and Context Button */}
               {!isRecording && (
                 <div className="flex space-x-4">
                   <ToggleSwitch
@@ -262,16 +271,18 @@ const WebRTCRecorder = () => {
                   />
                   <button
                     onClick={() => setShowContextDialog(true)}
-                    className="bg-purple-500 text-white px-4 rounded-lg hover:bg-purple-600"
+                    className="bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all"
                   >
-                    {isContextSaved ? <Pencil size={32} /> : <Plus size={32} />}
+                    {isContextSaved ? <Pencil size={24} /> : <Plus size={24} />}
                   </button>
                 </div>
               )}
-              <div className="flex space-x-4 py-2">
+
+              {/* Recording Controls */}
+              <div className="flex space-x-4">
                 <button
                   onClick={togglePauseResume}
-                  className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 focus:outline-none"
+                  className="bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all"
                 >
                   {!isRecording ? (
                     <Play size={20} />
@@ -284,7 +295,7 @@ const WebRTCRecorder = () => {
                 {isRecording && (
                   <button
                     onClick={stopRecording}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none"
+                    className="bg-gradient-to-r from-[#FB7085] to-[#FFA07A] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all"
                   >
                     <Square size={20} />
                   </button>
@@ -293,32 +304,39 @@ const WebRTCRecorder = () => {
                   <>
                     <button
                       onClick={downloadRecording}
-                      className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 focus:outline-none"
+                      className="bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white p-2 rounded-lg hover:opacity-90 transition-all"
                     >
                       <Download size={20} />
                     </button>
                     <button
                       onClick={() => setShowModal(true)}
-                      className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 focus:outline-none"
+                      className="bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white p-2 rounded-lg hover:opacity-90 transition-all"
                     >
                       <Eye size={20} />
                     </button>
                   </>
                 )}
               </div>
-              <input
-                type="file"
-                accept={isVideoEnabled ? "video/mp4" : "audio/wav"}
-                onChange={handleFileUpload}
-                className="mt-4"
-              />
-              <button
-                onClick={uploadRecording}
-                className="bg-indigo-500 text-white p-2 rounded-lg hover:bg-indigo-600 focus:outline-none"
-                disabled={loading}
-              >
-                {loading ? "Uploading..." : "Upload"}
-              </button>
+
+              {/* File Upload and Upload Button */}
+              <div className="flex flex-col items-center space-y-4 w-full">
+                <label className="bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all cursor-pointer">
+                  <span>Choose File</span>
+                  <input
+                    type="file"
+                    accept={isVideoEnabled ? "video/mp4" : "audio/wav"}
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                </label>
+                <button
+                  onClick={uploadRecording}
+                  className="bg-gradient-to-r from-[#3ABDF8] to-[#818CF8] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all w-full max-w-xs"
+                  disabled={loading}
+                >
+                  {loading ? "Uploading..." : "Upload"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -335,6 +353,20 @@ const WebRTCRecorder = () => {
         onSave={handleContextSave}
         initialContext={context}
       />
+      {report && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-[#1E293B] p-6 rounded-lg border border-[#334155]">
+            <h2 className="text-xl font-bold text-[#C9CBD0]">Report</h2>
+            <pre className="text-[#C9CBD0]">{JSON.stringify(report, null, 2)}</pre>
+            <button
+              onClick={() => setReport(null)}
+              className="mt-4 bg-gradient-to-r from-[#FB7085] to-[#FFA07A] text-white px-4 py-2 rounded-lg hover:opacity-90 transition-all"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -49,12 +49,12 @@ const RecentSessions = ({ sessions }) => {
     router.push(`/report?report=${encodeURIComponent(JSON.stringify(reportId))}`);
   };
 
+
   return (
-    <div className='flex flex-col w-full'>
-    <div className="w-full overflow-hidden shadow-md rounded-lg border-2">
+    <div className="w-full overflow-hidden shadow-md rounded-lg border-2 border-slate-700"> {/* Updated border color */}
       <div className="max-h-[360px] overflow-y-auto">
         <table className="w-full text-center text-gray-500">
-          <thead className="uppercase text-white glass-bg border-b-2">
+          <thead className="uppercase text-white bg-[#1E293B] border-b-2 border-slate-700"> {/* Updated border color */}
             <tr>
               <th scope="col" className="pr-1 py-2 text-[12px] sm:text-sm">Session<br />Name</th>
               <th scope="col" className="px-1 py-2 text-[12px] sm:text-sm">Voice</th>
@@ -67,7 +67,7 @@ const RecentSessions = ({ sessions }) => {
               <tr
                 key={report._id}
                 onClick={() => handleRowClick(report)}
-                className="glass-bg border-b hover:bg-gray-800 text-white cursor-pointer transition-all duration-300"
+                className="bg-[#1E293B] border-b border-slate-700 hover:bg-gray-800 text-white cursor-pointer transition-all duration-300"
               >
                 <td className="px-4 py-3 text-center text-[10px] sm:text-sm">
                   <span className="w-2 h-2 rounded-full bg-green-500 sm:hidden mr-2"></span>
