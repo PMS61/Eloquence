@@ -68,7 +68,6 @@ const WebRTCRecorder = () => {
   const startRecording = () => {
     if (stream) {
       const options = { mimeType: "video/mp4" };
-      const options = { mimeType: "video/mp4" };
       const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       mediaRecorder.ondataavailable = handleDataAvailable;

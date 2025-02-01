@@ -52,6 +52,13 @@ const ContextDialog = ({ isOpen, onClose, onSave, initialContext }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-[#1E293B] p-6 rounded-lg shadow-lg w-96 max-h-screen overflow-auto border border-[#334155]">
         <h2 className="text-xl font-semibold text-[#C9CBD0] mb-4">Enter Context</h2>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="w-full p-2 border rounded-lg mb-4 text-white bg-gray-800"
+          placeholder="Enter title for the session..."
+        />
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
